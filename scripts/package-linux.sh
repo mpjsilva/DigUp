@@ -56,7 +56,14 @@ python3 scripts/notices.py linux shell/src-tauri/THIRD-PARTY-NOTICES.txt
 # copies every plugin in GSTREAMER_PLUGINS_DIR): the ones WebKit's media player needs for sound and video. Not the build
 # system's whole folder, which also holds cameras, CDs, network streams and encoders, some linking GPL libraries.
 gstreamer=$(mktemp -d)
-gst_plugins=/usr/lib/$(uname -m)-linux-gnu/gstreamer-1.0
+# Debian/Ubuntu usam /usr/lib/<arch>-linux-gnu; Fedora/RHEL usam /usr/lib64.
+gst_plugins=${GSTREAMER_PLUGINS_DIR:-}
+if [[ -z $gst_plugins || ! -d $gst_plugins ]]; then
+  gst_plugins=/usr/lib/$(uname -m)-linux-gnu/gstreamer-1.0
+fi
+if [[ ! -d $gst_plugins ]]; then
+  gst_plugins=/usr/lib64/gstreamer-1.0
+fi
 plugins=(coreelements typefindfunctions playback app autodetect pulseaudio alsa audioconvert audioresample volume
   audiofx opengl wavparse audioparsers mpg123 flac ogg vorbis opus theora vpx isomp4 matroska avi jpeg id3demux apetag)
 if [[ -f $gst_plugins/libgstvideoconvertscale.so ]]; then
@@ -70,13 +77,21 @@ done
 # Their packages' copyright files go in beside the ones linuxdeploy brings for the libraries.
 docs=
 for package in gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-gl gstreamer1.0-alsa; do
-  docs+="${docs:+,}\"/usr/share/doc/$package/copyright\":\"/usr/share/doc/$package/copyright\""
+  # Fedora puts these under /usr/share/licenses; only map files that actually exist.
+  for base in /usr/share/doc /usr/share/licenses; do
+    if [[ -f $base/$package/copyright ]]; then
+      docs+="${docs:+,}\"$base/$package/copyright\":\"$base/$package/copyright\""
+      break
+    fi
+  done
 done
+# BUNDLES=deb builds only the .deb (handy on RPM distros, where the AppImage isn't needed).
+bundles=${BUNDLES:-deb,appimage}
 # Packages of an earlier build (another version) would be taken for this one's.
 rm -rf shell/src-tauri/target/release/bundle/deb shell/src-tauri/target/release/bundle/appimage
 # The helper folder goes in as the packages' resources here only: Tauri checks resources on every build.
 resources='{"helper/":"helper/","THIRD-PARTY-NOTICES.txt":"THIRD-PARTY-NOTICES.txt"}'
-(cd shell/src-tauri && GSTREAMER_PLUGINS_DIR="$gstreamer" "${tauri[@]}" build --bundles deb,appimage --config \
+(cd shell/src-tauri && GSTREAMER_PLUGINS_DIR="$gstreamer" "${tauri[@]}" build --bundles "$bundles" --config \
   "{\"bundle\":{\"resources\":$resources$signing,\"linux\":{\"appimage\":{\"files\":{$docs}}}}}")
 rm -rf "$gstreamer"
 
@@ -94,4 +109,7 @@ sed -i -E 's/^(Version: [0-9]+\.[0-9]+\.[0-9]+)-/\1~/' "$repack/DEBIAN/control"
 dpkg-deb --root-owner-group -Zxz -b "$repack" "$deb" > /dev/null
 rm -rf "$repack"
 rm -f "$deb.sig"   # signed before the repacking, so no longer its signature (a .deb doesn't update itself anyway)
-ls -la shell/src-tauri/target/release/bundle/deb/*.deb shell/src-tauri/target/release/bundle/appimage/*.AppImage
+ls -la shell/src-tauri/target/release/bundle/deb/*.deb
+if [[ $bundles == *appimage* ]]; then
+  ls -la shell/src-tauri/target/release/bundle/appimage/*.AppImage
+fi

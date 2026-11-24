@@ -89,12 +89,13 @@ O RPM contém exatamente os mesmos binários do `.deb` oficial. O código do emp
 
 ### Interface em português
 
-Neste fork, os textos da interface (Mac, Windows, Linux e ferramenta de linha de comando) foram traduzidos para o
-português brasileiro. As regras terminológicas estão em [`docs/glossario-pt-BR.md`](docs/glossario-pt-BR.md).
+Neste fork, o programa foi **recompilado do código-fonte com a interface em português brasileiro** — Mac, Windows,
+Linux e ferramenta de linha de comando. As regras terminológicas estão em
+[`docs/glossario-pt-BR.md`](docs/glossario-pt-BR.md).
 
-O RPM publicado contém os binários oficiais do release, que ainda estão em inglês: a tradução passa a valer quando o
-app é compilado a partir deste código-fonte. Não há compilador Swift/Node neste ambiente, então o pacote binário
-continua idêntico ao `.deb` upstream.
+O RPM publicado neste fork já contém esses binários traduzidos (não são os binários oficiais em inglês). Para gerar o
+pacote do zero, veja [`packaging/README.md`](packaging/README.md) — o processo instala Swift 6.4, compila llama.cpp,
+PDFium e FFmpeg, gera o `.deb` com `BUNDLES=deb` e converte para RPM.
 
 Depois, em qualquer sistema:
 

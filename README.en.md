@@ -73,12 +73,12 @@ Debian 12, Mint 21 and newer.
 
 ### Portuguese interface
 
-This fork translates the app's user-facing strings (Mac, Windows, Linux and the command-line tool) into Brazilian
-Portuguese. Terminology is documented in [`docs/glossario-pt-BR.md`](docs/glossario-pt-BR.md).
+This fork **rebuilds the app from source with a Brazilian Portuguese interface** — Mac, Windows, Linux and the
+command-line tool. Terminology is documented in [`docs/glossario-pt-BR.md`](docs/glossario-pt-BR.md).
 
-The published RPM still ships upstream's English binaries: the translation takes effect when the app is built from
-this source tree. Swift and Node aren't available in this environment, so the binary package remains identical to
-upstream's `.deb`.
+The RPM published here contains those translated binaries (not upstream's English ones). See
+[`packaging/README.md`](packaging/README.md) to rebuild it: install Swift 6.4, compile llama.cpp, PDFium and FFmpeg,
+produce the `.deb` with `BUNDLES=deb`, then convert it to RPM.
 
 Then, on any of them:
 

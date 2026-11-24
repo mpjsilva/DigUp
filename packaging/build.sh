@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-# Constroi o pacote RPM do DigUp a partir do .deb oficial do release.
-# Uso: ./packaging/build.sh
+# Constroi o pacote RPM do DigUp a partir de um .deb.
+# Uso: ./packaging/build.sh                       (baixa o .deb oficial e valida o SHA256)
+#      DEB_FILE=/caminho/para.deb ./packaging/build.sh   (usa um .deb local, ex.: build traduzido)
 set -euo pipefail
 
 UPSTREAM_VERSION="0.7.0-beta.3"
@@ -21,14 +22,21 @@ echo "==> Preparando diretorios de build"
 mkdir -p "${RPM_TOPDIR}"/{BUILD,BUILDROOT,RPMS,SPECS,SRPMS,SOURCES} "${DIST_DIR}" "${WORKDIR}"
 rm -rf "${WORKDIR}/pkg"
 
-echo "==> Baixando ${DEB_NAME} (se necessario)"
-DEB_FILE="${WORKDIR}/${DEB_NAME}"
-if [ ! -f "${DEB_FILE}" ]; then
-    curl -fL --retry 3 -o "${DEB_FILE}" "${DEB_URL}"
-fi
+if [ -n "${DEB_FILE:-}" ]; then
+    # Build local (ex.: .deb recompilado com a interface traduzida).
+    DEB_FILE="$(readlink -f "$DEB_FILE")"
+    [ -f "$DEB_FILE" ] || { echo "ERRO: DEB_FILE nao encontrado: $DEB_FILE" >&2; exit 1; }
+    echo "==> Usando .deb local: ${DEB_FILE}"
+else
+    echo "==> Baixando ${DEB_NAME} (se necessario)"
+    DEB_FILE="${WORKDIR}/${DEB_NAME}"
+    if [ ! -f "${DEB_FILE}" ]; then
+        curl -fL --retry 3 -o "${DEB_FILE}" "${DEB_URL}"
+    fi
 
-echo "==> Verificando SHA256"
-echo "${DEB_SHA256}  ${DEB_FILE}" | sha256sum --check --strict
+    echo "==> Verificando SHA256"
+    echo "${DEB_SHA256}  ${DEB_FILE}" | sha256sum --check --strict
+fi
 
 echo "==> Extraindo o .deb"
 mkdir -p "${WORKDIR}/pkg/DEBIAN" "${WORKDIR}/pkg/root"

@@ -55,6 +55,18 @@ inglês. A interface, os menus e a ferramenta de linha de comando estão em PT-B
 mkdir -p %{buildroot}
 cp -a usr %{buildroot}/
 
+# No Wayland, o KDE escolhe o icone da barra de titulo pelo app_id (o nome do
+# executavel, "digup-shell"), nao pelo StartupWMClass. Um desktop file oculto com
+# esse nome faz o titulo usar o mesmo icone da barra de tarefas, sem criar uma
+# segunda entrada no menu.
+cat > %{buildroot}%{_datadir}/applications/digup-shell.desktop <<'DESKTOP'
+[Desktop Entry]
+Type=Application
+Name=DigUp
+Icon=digup-shell
+NoDisplay=true
+DESKTOP
+
 %check
 test -x %{buildroot}%{_bindir}/digup-shell
 test -x %{buildroot}/usr/lib/DigUp/helper/digup
@@ -88,6 +100,7 @@ fi
 /usr/lib/DigUp/helper/ffprobe
 /usr/lib/DigUp/helper/lib*.so*
 %{_datadir}/applications/DigUp.desktop
+%{_datadir}/applications/digup-shell.desktop
 %{_datadir}/icons/hicolor/32x32/apps/digup-shell.png
 %{_datadir}/icons/hicolor/128x128/apps/digup-shell.png
 %{_datadir}/icons/hicolor/256x256@2/apps/digup-shell.png

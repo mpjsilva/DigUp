@@ -83,7 +83,7 @@ impl Status {
                 self.missing = paths("folders");
                 self.unreadable = paths("unreadable");
             }
-            "error" if event["fatal"] == true => self.activity = Activity::Failed("Indexing stopped".into()),
+            "error" if event["fatal"] == true => self.activity = Activity::Failed("Indexação interrompida".into()),
             // The helper is gone: whatever it was doing is over.
             "exit" | "ended" => {
                 if matches!(self.activity, Activity::Starting | Activity::Scanning | Activity::Indexing { .. } | Activity::Finishing { .. }) {
@@ -97,7 +97,7 @@ impl Status {
     /// One line for the tray and the window: "Indexing 42% · 120 of 306", "306 files indexed".
     pub fn line(&self, has_folders: bool, model: &Value) -> String {
         if !has_folders {
-            return "No folders chosen yet".into();
+            return "Nenhuma pasta escolhida ainda".into();
         }
         if let Activity::Failed(problem) = &self.activity {
             return format!("⚠︎ {problem}");
@@ -107,30 +107,30 @@ impl Status {
             return line;
         }
         if self.measuring {
-            return "Checking this computer's speed…".into();
+            return "Verificando a velocidade deste computador…".into();
         }
         match self.activity {
             // Held or paused, no index helper runs to say it has started: what's indexed stands.
-            Activity::Starting if !self.paused && self.held_until.is_none() => "Starting…".into(),
-            Activity::Scanning => "Checking folders…".into(),
-            Activity::Indexing { done, total } => format!("Indexing {}% · {} of {}", percent(done, total), number(done), number(total)),
+            Activity::Starting if !self.paused && self.held_until.is_none() => "Iniciando…".into(),
+            Activity::Scanning => "Verificando pastas…".into(),
+            Activity::Indexing { done, total } => format!("Indexando {}% · {} de {}", percent(done, total), number(done), number(total)),
             Activity::Finishing { done, total, files } => {
-                let which = if files > 0 { format!("{} long {}", number(files), plural(files, "file", "files")) } else { "long files".into() };
-                format!("Reading the rest of {which} · {}%", percent(done, total))
+                let which = if files > 0 { format!("{} {}", number(files), plural(files, "arquivo longo", "arquivos longos")) } else { "arquivos longos".into() };
+                format!("Lendo o restante de {which} · {}%", percent(done, total))
             }
             _ if self.pending > 0 => {
-                let waiting = format!("{} {} waiting", number(self.pending), plural(self.pending, "file", "files"));
+                let waiting = format!("{} {} aguardando", number(self.pending), plural(self.pending, "arquivo", "arquivos"));
                 match &self.held_until {
-                    _ if self.paused => format!("Paused · {waiting}"),
-                    Some(start) => format!("{waiting} · indexing from {start}"),
-                    None => format!("{waiting} to be indexed"),
+                    _ if self.paused => format!("Pausado · {waiting}"),
+                    Some(start) => format!("{waiting} · indexação a partir de {start}"),
+                    None => format!("{waiting} a indexar"),
                 }
             }
             _ => {
-                let indexed = format!("{} {} indexed", number(self.searchable), plural(self.searchable, "file", "files"));
+                let indexed = format!("{} {}", number(self.searchable), plural(self.searchable, "arquivo indexado", "arquivos indexados"));
                 match &self.held_until {
-                    _ if self.paused => format!("{indexed} · paused"),
-                    Some(start) => format!("{indexed} · indexing from {start}"),
+                    _ if self.paused => format!("{indexed} · pausado"),
+                    Some(start) => format!("{indexed} · indexação a partir de {start}"),
                     None => indexed,
                 }
             }
@@ -140,13 +140,13 @@ impl Status {
     /// A few words beside the panel's field while results may be incomplete: "Indexing 42%", "Downloading model · 42%".
     pub fn badge(&self, model: &Value) -> Option<String> {
         if model["state"] == "downloading" {
-            return Some(format!("Downloading model · {}%", (fraction(model) * 100.0) as u64));
+            return Some(format!("Baixando modelo · {}%", (fraction(model) * 100.0) as u64));
         }
         if self.paused && self.pending > 0 {
-            return Some("Indexing paused".into());
+            return Some("Indexação pausada".into());
         }
         match self.activity {
-            Activity::Indexing { done, total } if total > 0 => Some(format!("Indexing {}%", percent(done, total))),
+            Activity::Indexing { done, total } if total > 0 => Some(format!("Indexando {}%", percent(done, total))),
             _ => None,
         }
     }
@@ -174,18 +174,18 @@ impl Status {
     pub fn caveat(&self, model: &Value) -> Option<String> {
         match model["state"].as_str() {
             Some("downloading") => {
-                return Some(format!("Matching words only until the model has downloaded ({}%)", (fraction(model) * 100.0) as u64))
+                return Some(format!("Busca por palavras apenas até o download do modelo ({}%)", (fraction(model) * 100.0) as u64))
             }
-            Some("waiting" | "failed") => return Some("Matching words only: the model isn't downloaded".into()),
+            Some("waiting" | "failed") => return Some("Busca por palavras apenas: o modelo não foi baixado".into()),
             _ => {}
         }
         if let Activity::Indexing { done, total } = self.activity {
             if total > 0 {
-                return Some(format!("Still indexing ({}%): some files aren't in yet", percent(done, total)));
+                return Some(format!("Ainda indexando ({}%): alguns arquivos ainda não estão incluídos", percent(done, total)));
             }
         }
         (self.pending > 0).then(|| {
-            format!("{} {} indexed yet", number(self.pending), plural(self.pending, "file isn't", "files aren't"))
+            format!("{} {}", number(self.pending), plural(self.pending, "arquivo ainda não indexado", "arquivos ainda não indexados"))
         })
     }
 
@@ -226,10 +226,10 @@ impl Status {
 /// While the model isn't there, how its download goes.
 fn download_line(model: &Value) -> Option<String> {
     match model["state"].as_str()? {
-        "downloading" => Some(format!("Downloading the model · {}%", (fraction(model) * 100.0) as u64)),
-        "checking" => Some("Checking the model download…".into()),
-        "waiting" => Some("Model download: waiting for the network".into()),
-        "failed" => Some("⚠︎ The model download stopped".into()),
+        "downloading" => Some(format!("Baixando o modelo · {}%", (fraction(model) * 100.0) as u64)),
+        "checking" => Some("Verificando o download do modelo…".into()),
+        "waiting" => Some("Download do modelo: aguardando a rede".into()),
+        "failed" => Some("⚠︎ O download do modelo parou".into()),
         _ => None,
     }
 }
@@ -248,13 +248,13 @@ fn plural(count: u64, one: &'static str, many: &'static str) -> &'static str {
     if count == 1 { one } else { many }
 }
 
-/// "1,204"
+/// "1.204" (separador de milhares brasileiro)
 pub fn number(value: u64) -> String {
     let digits = value.to_string();
     let mut out = String::new();
     for (index, digit) in digits.chars().enumerate() {
         if index > 0 && (digits.len() - index) % 3 == 0 {
-            out.push(',');
+            out.push('.');
         }
         out.push(digit);
     }
@@ -269,41 +269,41 @@ mod tests {
     fn lines() {
         let ready = json!({"state": "ready"});
         let mut status = Status::default();
-        assert_eq!(status.line(false, &ready), "No folders chosen yet");
-        assert_eq!(status.line(true, &ready), "Starting…");
+        assert_eq!(status.line(false, &ready), "Nenhuma pasta escolhida ainda");
+        assert_eq!(status.line(true, &ready), "Iniciando…");
         assert_eq!(status.line(true, &json!({"state": "downloading", "bytes": 432.0, "total": 865.0})),
-                   "Downloading the model · 49%");
+                   "Baixando o modelo · 49%");
         status.apply(&json!({"event": "sync", "new": 306, "files": 306, "searchable": 0, "pending": 306}));
-        assert_eq!(status.line(true, &ready), "Indexing 0% · 0 of 306");
+        assert_eq!(status.line(true, &ready), "Indexando 0% · 0 de 306");
         status.apply(&json!({"event": "file", "done": 129, "total": 306}));
-        assert_eq!(status.line(true, &ready), "Indexing 42% · 129 of 306");
+        assert_eq!(status.line(true, &ready), "Indexando 42% · 129 de 306");
         assert_eq!(status.progress(&ready), Some(129.0 / 306.0));
-        assert_eq!(status.caveat(&ready).as_deref(), Some("Still indexing (42%): some files aren't in yet"));
+        assert_eq!(status.caveat(&ready).as_deref(), Some("Ainda indexando (42%): alguns arquivos ainda não estão incluídos"));
         status.apply(&json!({"event": "file", "done": 1, "total": 1, "code": true}));
-        assert_eq!(status.line(true, &ready), "Indexing 42% · 129 of 306");
+        assert_eq!(status.line(true, &ready), "Indexando 42% · 129 de 306");
         status.apply(&json!({"event": "rest", "done": 40, "total": 100, "files": 3}));
-        assert_eq!(status.line(true, &ready), "Reading the rest of 3 long files · 40%");
+        assert_eq!(status.line(true, &ready), "Lendo o restante de 3 arquivos longos · 40%");
         status.apply(&json!({"event": "idle", "files": 1306, "searchable": 1306, "pending": 0, "unfinished": 0}));
-        assert_eq!(status.line(true, &ready), "1,306 files indexed");
+        assert_eq!(status.line(true, &ready), "1,306 arquivos indexados");
         assert_eq!(status.progress(&ready), None);
         assert_eq!(status.caveat(&ready), None);
         status.apply(&json!({"event": "error", "message": "worker died", "fatal": true}));
-        assert_eq!(status.line(true, &ready), "⚠︎ Indexing stopped");
+        assert_eq!(status.line(true, &ready), "⚠︎ Indexação interrompida");
 
         let mut held = Status { held_until: Some("01:00".into()), ..Status::default() };
         held.apply(&json!({"event": "counts", "files": 70, "searchable": 66, "pending": 4, "unfinished": 0}));
-        assert_eq!(held.line(true, &ready), "4 files waiting · indexing from 01:00");
+        assert_eq!(held.line(true, &ready), "4 arquivos aguardando · indexação a partir de 01:00");
         assert!(held.busy(&ready));
         held.held_until = None;
         held.paused = true;
-        assert_eq!(held.line(true, &ready), "Paused · 4 files waiting");
+        assert_eq!(held.line(true, &ready), "Pausado · 4 arquivos aguardando");
     }
 
     #[test]
     fn numbers() {
         assert_eq!(number(0), "0");
         assert_eq!(number(999), "999");
-        assert_eq!(number(1000), "1,000");
-        assert_eq!(number(1234567), "1,234,567");
+        assert_eq!(number(1000), "1.000");
+        assert_eq!(number(1234567), "1.234.567");
     }
 }

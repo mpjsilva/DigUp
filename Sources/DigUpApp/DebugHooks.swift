@@ -154,10 +154,10 @@ enum DebugHooks {
             let menu = app.statusMenu!
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                 log("menu: \(menu.describeMenu())")
-                menu.performItem(titled: "Pause Indexing")
+                menu.performItem(titled: "Pausar indexação")
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     log("menu after Pause: \(menu.describeMenu())")
-                    menu.performItem(titled: "Resume Indexing")
+                    menu.performItem(titled: "Retomar indexação")
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         log("menu after Resume: \(menu.describeMenu())")
                     }

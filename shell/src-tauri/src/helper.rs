@@ -57,11 +57,11 @@ impl Launch {
                 });
             }
         }
-        let mut child = command.spawn().map_err(|error| format!("can't start {}: {error}", self.program.display()))?;
+        let mut child = command.spawn().map_err(|error| format!("não é possível iniciar {}: {error}", self.program.display()))?;
         #[cfg(windows)]
         job::add(&child);
-        let stdin = child.stdin.take().ok_or("no stdin")?;
-        let stdout = child.stdout.take().ok_or("no stdout")?;
+        let stdin = child.stdin.take().ok_or("sem stdin")?;
+        let stdout = child.stdout.take().ok_or("sem stdout")?;
         Ok((child, stdin, stdout))
     }
 }
@@ -142,9 +142,9 @@ impl SearchService {
         let id = self.next_id.fetch_add(1, Ordering::Relaxed);
         request["id"] = json!(id);
         let reply = self.send(id, &request)?;
-        let reply = reply.await.map_err(|_| "DigUp's helper stopped".to_string())?;
+        let reply = reply.await.map_err(|_| "o auxiliar do DigUp parou".to_string())?;
         match reply.get("ok") {
-            Some(Value::Bool(false)) => Err(reply["error"].as_str().unwrap_or("the helper failed").to_string()),
+            Some(Value::Bool(false)) => Err(reply["error"].as_str().unwrap_or("o auxiliar falhou").to_string()),
             _ => Ok(reply),
         }
     }
@@ -165,7 +165,7 @@ impl SearchService {
         if let Err(error) = writeln!(searching.stdin, "{request}").and_then(|_| searching.stdin.flush()) {
             searching.pending.lock().unwrap().remove(&id);
             *running = None;
-            return Err(format!("DigUp's helper isn't answering: {error}"));
+            return Err(format!("o auxiliar do DigUp não está respondendo: {error}"));
         }
         Ok(receiver)
     }

@@ -89,8 +89,8 @@ final class FolderChoices {
                 expanded.insert(row.path)
             } else if selection.isSearched(path) {
                 let by = selection.searchedAs(path)
-                note = "“\(folder.lastPathComponent)” is searched already"
-                    + (by == nil || by == path ? "." : ", as part of “\((by! as NSString).lastPathComponent)”.")
+                note = "“\(folder.lastPathComponent)” já é buscada"
+                    + (by == nil || by == path ? "." : ", como parte de “\((by! as NSString).lastPathComponent)”.")
             } else {
                 rows.append(folder)
                 selection.setFolder(path, on: true)
@@ -116,7 +116,7 @@ final class FolderChoices {
                 selection.setSubfolder(path, on: false)
                 deeper.append(path)
             } else {
-                note = "“\(folder.lastPathComponent)” isn't searched anyway."
+                note = "“\(folder.lastPathComponent)” não é buscada de qualquer forma."
             }
         }
         estimate(rows.filter { row in deeper.contains { FolderSelection.isInside($0, row.path) } })
@@ -267,10 +267,10 @@ private struct FolderRow: View {
     let row: URL
     @State private var showAll = false
 
-    static let laterHelp = "The first pass takes this long. Long PDFs and documents get their first pages in it, "
-        + "and the rest afterwards, once everything else is in."
-    static let codeHelp = "How long reading this code takes, once, and about how much room its index needs. After "
-        + "that, only what changes is read again."
+    static let laterHelp = "A primeira leitura leva esse tempo. PDFs e documentos longos têm suas primeiras páginas nela, "
+        + "e o restante depois, quando tudo o mais já estiver indexado."
+    static let codeHelp = "Quanto tempo leva a leitura desse código, uma vez, e quanto espaço seu índice precisa. Depois "
+        + "disso, apenas o que muda é lido novamente."
 
     /// Subfolders shown before "Show N more".
     private static let shortList = 8
@@ -289,7 +289,7 @@ private struct FolderRow: View {
                         SubfolderRow(choices: choices, subfolder: subfolder)
                     }
                     if !showAll, subfolders.count > Self.shortList {
-                        Button("Show \(subfolders.count - Self.shortList) more") { showAll = true }
+                        Button("Mostrar mais \(subfolders.count - Self.shortList)") { showAll = true }
                             .buttonStyle(.link)
                             .font(.system(size: 11))
                             .frame(maxWidth: .infinity, alignment: .leading)
@@ -326,9 +326,9 @@ private struct FolderRow: View {
             .buttonStyle(.plain)
             .opacity(canOpen ? 1 : 0)
             .disabled(!canOpen)
-            .help(open ? "Hide its subfolders" : "Choose among its subfolders")
-            .accessibilityLabel(open ? "Hide the subfolders of \(row.lastPathComponent)"
-                                : "Show the subfolders of \(row.lastPathComponent)")
+            .help(open ? "Ocultar suas subpastas" : "Escolher entre suas subpastas")
+            .accessibilityLabel(open ? "Ocultar as subpastas de \(row.lastPathComponent)"
+                                : "Mostrar as subpastas de \(row.lastPathComponent)")
             Checkbox(mark: mark, label: row.lastPathComponent) { choices.toggle(row) }
             Image(nsImage: NSWorkspace.shared.icon(forFile: row.path))
                 .resizable()
@@ -336,15 +336,15 @@ private struct FolderRow: View {
             VStack(alignment: .leading, spacing: 3) {
                 Text(row.lastPathComponent).font(.system(size: 13, weight: .semibold))
                 if let estimate, estimate.failed {
-                    Text("Couldn't look inside it; it can still be searched.")
+                    Text("Não foi possível olhar dentro dela; ela ainda pode ser buscada.")
                         .font(.system(size: 11))
                         .foregroundStyle(.secondary)
                 } else if let estimate, !estimate.readable {
                     HStack(spacing: 6) {
-                        Text("macOS isn't letting DigUp read it.")
+                        Text("O macOS não está permitindo que o DigUp a leia.")
                             .font(.system(size: 11))
                             .foregroundStyle(.orange)
-                        Button("Allow in Settings…", action: openFolderPrivacySettings)
+                        Button("Permitir em Configurações…", action: openFolderPrivacySettings)
                             .buttonStyle(.link)
                             .font(.system(size: 11))
                     }
@@ -352,8 +352,8 @@ private struct FolderRow: View {
                     KindCounts(counts: part.files)
                 } else {
                     Text(estimate == nil ? tildePath(row.path)
-                         : estimate!.files.isEmpty ? (choices.code ? "No code here" : "Nothing to search here yet")
-                         : "Nothing to search in the subfolders checked")
+                         : estimate!.files.isEmpty ? (choices.code ? "Nenhum código aqui" : "Nada para buscar aqui ainda")
+                         : "Nada para buscar nas subpastas marcadas")
                         .font(.system(size: 11))
                         .foregroundStyle(.secondary)
                         .lineLimit(1)
@@ -371,7 +371,7 @@ private struct FolderRow: View {
                             .font(.system(size: 10).monospacedDigit())
                             .foregroundStyle(.tertiary)
                     } else if let later = part?.later, later >= 30 {
-                        Text("+ \(roughDuration(later)) later")
+                        Text("+ \(roughDuration(later)) depois")
                             .font(.system(size: 10).monospacedDigit())
                             .foregroundStyle(.tertiary)
                     }
@@ -413,7 +413,7 @@ private struct SubfolderRow: View {
             Spacer(minLength: 8)
             Text(approximately(subfolder.seconds)
                  + (choices.code ? " · \(roughBytes(subfolder.bytes))"
-                    : subfolder.laterSeconds >= 30 ? " + \(roughDuration(subfolder.laterSeconds)) later" : ""))
+                    : subfolder.laterSeconds >= 30 ? " + \(roughDuration(subfolder.laterSeconds)) depois" : ""))
                 .font(.system(size: 11, weight: .medium).monospacedDigit())
                 .foregroundStyle(on ? .secondary : .tertiary)
                 .help(choices.code ? FolderRow.codeHelp : FolderRow.laterHelp)

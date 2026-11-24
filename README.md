@@ -87,6 +87,15 @@ O RPM contém exatamente os mesmos binários do `.deb` oficial. O código do emp
 [`packaging/`](packaging/) e as instruções de build, em
 [`packaging/README.md`](packaging/README.md).
 
+### Interface em português
+
+Neste fork, os textos da interface (Mac, Windows, Linux e ferramenta de linha de comando) foram traduzidos para o
+português brasileiro. As regras terminológicas estão em [`docs/glossario-pt-BR.md`](docs/glossario-pt-BR.md).
+
+O RPM publicado contém os binários oficiais do release, que ainda estão em inglês: a tradução passa a valer quando o
+app é compilado a partir deste código-fonte. Não há compilador Swift/Node neste ambiente, então o pacote binário
+continua idêntico ao `.deb` upstream.
+
 Depois, em qualquer sistema:
 
 1. Abra o DigUp. Enquanto o modelo é baixado (865 MB, uma única vez), escolha as pastas que deseja buscar: pastas

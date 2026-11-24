@@ -71,6 +71,15 @@ The package is called `dig-up`, because Debian already has an unrelated `digup`.
 AppImage, make it executable and run it. Both are for 64-bit Intel and AMD processors and work on Ubuntu 22.04,
 Debian 12, Mint 21 and newer.
 
+### Portuguese interface
+
+This fork translates the app's user-facing strings (Mac, Windows, Linux and the command-line tool) into Brazilian
+Portuguese. Terminology is documented in [`docs/glossario-pt-BR.md`](docs/glossario-pt-BR.md).
+
+The published RPM still ships upstream's English binaries: the translation takes effect when the app is built from
+this source tree. Swift and Node aren't available in this environment, so the binary package remains identical to
+upstream's `.deb`.
+
 Then, on any of them:
 
 1. Open DigUp. While the model downloads (865 MB, once), pick the folders to search: whole folders, or only some of

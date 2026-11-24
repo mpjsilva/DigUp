@@ -215,7 +215,7 @@ nonisolated final class Engine: @unchecked Sendable {
     func start() {
         searchQueue.async { [self] in
             guard openSearcher() else {
-                update { $0.activity = .failed("Can't open the index") }
+                update { $0.activity = .failed("Não é possível abrir o índice") }
                 return
             }
             indexQueue.async { [self] in startHelper() }
@@ -539,7 +539,7 @@ nonisolated final class Engine: @unchecked Sendable {
             try process.run()
         } catch {
             log("indexer: can't start \(process.executableURL?.path ?? "the helper"): \(error)")
-            update { $0.activity = .failed("Can't start indexing") }
+            update { $0.activity = .failed("Não é possível iniciar a indexação") }
             return
         }
         helper = process
@@ -656,7 +656,7 @@ nonisolated final class Engine: @unchecked Sendable {
         case "error":
             log("indexer: \(event["message"] as? String ?? "error")")
             update {
-                if event["fatal"] as? Bool == true { $0.activity = .failed("Indexing stopped") }
+                if event["fatal"] as? Bool == true { $0.activity = .failed("A indexação parou") }
                 else if case .syncing = $0.activity { $0.activity = .idle }
             }
         default:
@@ -700,7 +700,7 @@ nonisolated final class Engine: @unchecked Sendable {
             log("indexer: the model changed, the code index starts over")
         case "error":
             log("indexer: code: \(event["message"] as? String ?? "error")")
-            if event["fatal"] as? Bool == true { update { $0.activity = .failed("Indexing stopped") } }
+            if event["fatal"] as? Bool == true { update { $0.activity = .failed("A indexação parou") } }
         default:
             break
         }

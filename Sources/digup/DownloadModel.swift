@@ -39,10 +39,10 @@ func downloadModel(_ args: Arguments) throws -> Int32 {
                     try? FileManager.default.removeItem(at: partial)
                     failures += 1
                     guard failures < 3 else {
-                        emit(["event": "error", "message": "\(file.name) arrived damaged, three times"])
+                        emit(["event": "error", "message": "\(file.name) chegou corrompido três vezes"])
                         return 1
                     }
-                    emit(["event": "retry", "message": "\(file.name) arrived damaged", "seconds": 0])
+                    emit(["event": "retry", "message": "\(file.name) chegou corrompido", "seconds": 0])
                     continue
                 }
                 try FileManager.default.moveItem(at: partial, to: final)
@@ -81,7 +81,7 @@ private func fetch(_ file: ModelFiles.File, into folder: URL, before done: Int64
     })
     fetcher.start()
     finished.wait()
-    return result.outcome ?? .failed("the download stopped", retry: true)
+    return result.outcome ?? .failed("o download parou", retry: true)
 }
 
 private final class OutcomeBox: @unchecked Sendable {   // written once, before the semaphore is signalled

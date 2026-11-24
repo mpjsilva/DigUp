@@ -80,7 +80,7 @@ impl Options {
         };
         let mut args = std::env::args().skip(1);
         while let Some(arg) = args.next() {
-            let mut value = || args.next().ok_or_else(|| format!("{arg} needs a value"));
+            let mut value = || args.next().ok_or_else(|| format!("{arg} precisa de um valor"));
             match arg.as_str() {
                 "--helper" => options.helper = value()?.into(),
                 "--index" => options.index = Some(value()?.into()),
@@ -103,12 +103,12 @@ impl Options {
                 "--at-login" => options.at_login = true,
                 "--debug-update-check" => options.debug_update_check = true,
                 "--debug-update-install" => options.debug_update_install = true,
-                _ => return Err(format!("unknown argument {arg}")),
+                _ => return Err(format!("argumento desconhecido {arg}")),
             }
         }
         // On a Mac the shell is only tried out: the helper's default index there is the Mac app's.
         if cfg!(target_os = "macos") && options.index.is_none() {
-            return Err("pass --index: on a Mac the default index belongs to the DigUp app".into());
+            return Err("passe --index: no Mac, o índice padrão pertence ao app DigUp".into());
         }
         Ok(options)
     }

@@ -90,7 +90,7 @@ final class SearchService: @unchecked Sendable {   // its state is guarded by `l
             let id: Any = request["id"] ?? NSNull()
             var reply: [String: Any]
             do {
-                guard let op = request["op"] as? String else { throw CLIError("no op") }
+                guard let op = request["op"] as? String else { throw CLIError("falta a operação (op)") }
                 if op == "quit" {
                     write(["id": id, "ok": true])
                     lock.withLock { stopEncoder() }
@@ -140,7 +140,7 @@ final class SearchService: @unchecked Sendable {   // its state is guarded by `l
                    let source = encoder?.info.vectorSource, indexed != source {
                     vector = nil
                     if !warnedAboutSource {
-                        warning = "meaning search is off: the index was built with \(indexed), the encoder is \(source)"
+                        warning = "a busca por significado está desativada: o índice foi criado com \(indexed), o codificador é \(source)"
                         warnedAboutSource = true
                     }
                 }
@@ -172,7 +172,7 @@ final class SearchService: @unchecked Sendable {   // its state is guarded by `l
             _ = vector(for: request["q"] as? String ?? "", code: request["code"] as? Bool ?? false)
             return ["ok": true]
         case "text":
-            guard let segment = (request["segment"] as? NSNumber)?.int64Value else { throw CLIError("which segment?") }
+            guard let segment = (request["segment"] as? NSNumber)?.int64Value else { throw CLIError("qual segmento?") }
             let code = request["code"] as? Bool ?? false
             return ["text": try (code ? codeSearcher : searcher)?.text(ofSegment: segment) ?? NSNull()]
         case "reload":
@@ -223,7 +223,7 @@ final class SearchService: @unchecked Sendable {   // its state is guarded by `l
             }
             return reply
         default:
-            throw CLIError("unknown op \(op)")
+            throw CLIError("operação desconhecida \(op)")
         }
     }
 
@@ -264,7 +264,7 @@ final class SearchService: @unchecked Sendable {   // its state is guarded by `l
     // MARK: Previews
 
     private func render(_ request: [String: Any]) throws -> [String: Any] {
-        guard let path = request["path"] as? String else { throw CLIError("which file?") }
+        guard let path = request["path"] as? String else { throw CLIError("qual arquivo?") }
         let kind = request["kind"] as? String ?? "image"
         let loc = (request["loc"] as? NSNumber)?.doubleValue
         let pixels = min(max(request["pixels"] as? Int ?? 1024, 32), 2048)

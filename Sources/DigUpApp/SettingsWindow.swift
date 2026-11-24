@@ -8,10 +8,10 @@ enum SettingsTab: String, CaseIterable {
 
     var title: String {
         switch self {
-        case .general: "General"
-        case .folders: "Folders"
-        case .code: "Code"
-        case .storage: "Storage"
+        case .general: "Geral"
+        case .folders: "Pastas"
+        case .code: "Código"
+        case .storage: "Armazenamento"
         }
     }
 
@@ -210,8 +210,8 @@ private struct GeneralSettings: View {
                                      listening: { state.app.hotkeyRecording($0) }, capSize: 13)
                 } label: {
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("Search shortcut")
-                        Text("Opens the search panel from any app.")
+                        Text("Atalho de busca")
+                        Text("Abre o painel de busca de qualquer app.")
                             .font(.system(size: 11))
                             .foregroundStyle(.secondary)
                     }
@@ -223,8 +223,8 @@ private struct GeneralSettings: View {
                     state.launchAtLogin = state.app.launchesAtLogin
                 })) {
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("Open DigUp when you log in")
-                        Text(state.loginProblem ?? "So the shortcut always works.")
+                        Text("Abrir o DigUp ao iniciar")
+                        Text(state.loginProblem ?? "Para que o atalho funcione sempre.")
                             .font(.system(size: 11))
                             .foregroundStyle(state.loginProblem == nil ? AnyShapeStyle(.secondary) : AnyShapeStyle(.red))
                     }
@@ -236,18 +236,18 @@ private struct GeneralSettings: View {
                     state.checksForUpdates = on
                 })) {
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("Check for updates automatically")
-                        Text("Once a day DigUp asks GitHub for its newest version; nothing about your files is sent. "
-                             + "Updates install with one click.")
+                        Text("Verificar atualizações automaticamente")
+                        Text("Uma vez por dia, o DigUp pergunta ao GitHub qual é a versão mais recente; nada sobre seus arquivos é enviado. "
+                             + "As atualizações são instaladas com um clique.")
                             .font(.system(size: 11))
                             .foregroundStyle(.secondary)
                             .fixedSize(horizontal: false, vertical: true)
                     }
                 }
                 LabeledContent {
-                    Button("Check Now") { state.app.updates.checkNow() }
+                    Button("Verificar agora") { state.app.updates.checkNow() }
                 } label: {
-                    Text(state.model.updateAvailable.map { "DigUp \($0) is available" }
+                    Text(state.model.updateAvailable.map { "O DigUp \($0) está disponível" }
                          ?? "DigUp \(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "")")
                 }
             }
@@ -269,7 +269,7 @@ private struct FolderSettings: View {
             Section {
                 if let summaries = state.summaries {
                     if summaries.isEmpty {
-                        Text("No folders yet. Add the ones DigUp should search.")
+                        Text("Nenhuma pasta ainda. Adicione as que o DigUp deve buscar.")
                             .foregroundStyle(.secondary)
                     }
                     ForEach(summaries) { summary in
@@ -279,11 +279,11 @@ private struct FolderSettings: View {
                     ProgressView().controlSize(.small).frame(maxWidth: .infinity)
                 }
             } header: {
-                Text("Folders to search")
+                Text("Pastas para buscar")
             } footer: {
                 HStack {
                     Button(action: state.addFolders) {
-                        Label("Add Folders…", systemImage: "plus")
+                        Label("Adicionar pastas…", systemImage: "plus")
                     }
                     Spacer()
                 }
@@ -302,25 +302,25 @@ private struct FolderSettings: View {
                             Image(systemName: "minus.circle.fill").foregroundStyle(.secondary)
                         }
                         .buttonStyle(.plain)
-                        .help("Search this folder again")
+                        .help("Buscar esta pasta novamente")
                     }
                 }
                 if state.model.settings.excludedFolders.isEmpty {
-                    Text("None. Code projects, app bundles and caches are skipped anyway (code has its own tab).")
+                    Text("Nenhuma. Projetos de código, pacotes de apps e caches são ignorados de qualquer forma (o código tem sua própria aba).")
                         .foregroundStyle(.secondary)
                 }
             } header: {
-                Text("Skip these folders")
+                Text("Ignorar estas pastas")
             } footer: {
                 HStack {
                     Button {
-                        state.app.pickFolders(for: NSApp.keyWindow, prompt: "Skip") { folders in
+                        state.app.pickFolders(for: NSApp.keyWindow, prompt: "Ignorar") { folders in
                             guard !folders.isEmpty else { return }
                             state.app.setExcluded(state.model.settings.excludedFolders
                                 + folders.filter { !state.model.settings.excludedFolders.contains($0) })
                         }
                     } label: {
-                        Label("Skip a Folder…", systemImage: "plus")
+                        Label("Ignorar uma pasta…", systemImage: "plus")
                     }
                     Spacer()
                 }
@@ -328,11 +328,11 @@ private struct FolderSettings: View {
             Section {
                 TypeExclusions(types: state.model.settings.excludedTypes) { state.app.setExcludedTypes($0) }
             } header: {
-                Text("Skip these file types")
+                Text("Ignorar estes tipos de arquivo")
             } footer: {
-                Text("DigUp only reads pictures, PDFs, documents (txt, md, typ, rtf, docx, odt, html), audio and video here; "
-                     + "code is read only in the code folders (the Code tab). Keys, certificates and password files are "
-                     + "never read, nor are hidden folders like ~/.ssh.")
+                Text("Aqui, o DigUp lê apenas imagens, PDFs, documentos (txt, md, typ, rtf, docx, odt, html), áudio e vídeo; "
+                     + "o código é lido apenas nas pastas de código (aba Código). Chaves, certificados e arquivos de senha "
+                     + "nunca são lidos, nem pastas ocultas como ~/.ssh.")
                     .font(.system(size: 11))
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -351,21 +351,21 @@ private struct FolderSettings: View {
                     state.app.setIndexHours(on: on, hours: state.model.settings.indexHours)
                 })) {
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("Index only at set hours")
-                        Text("Files are read only between these times, and what changed meanwhile is picked up when "
-                             + "they begin. Search works all day.")
+                        Text("Indexar apenas em horários definidos")
+                        Text("Os arquivos são lidos apenas nesse intervalo, e o que mudou durante ele é lido quando "
+                             + "ele começa. A busca funciona o dia todo.")
                             .font(.system(size: 11))
                             .foregroundStyle(.secondary)
                             .fixedSize(horizontal: false, vertical: true)
                     }
                 }
                 if state.model.settings.indexHoursOn {
-                    LabeledContent("From") {
+                    LabeledContent("Das") {
                         HStack(spacing: 6) {
-                            DatePicker("From", selection: time(\.start), displayedComponents: .hourAndMinute)
+                            DatePicker("Das", selection: time(\.start), displayedComponents: .hourAndMinute)
                                 .labelsHidden()
-                            Text("to")
-                            DatePicker("To", selection: time(\.end), displayedComponents: .hourAndMinute)
+                            Text("às")
+                            DatePicker("Até", selection: time(\.end), displayedComponents: .hourAndMinute)
                                 .labelsHidden()
                         }
                     }
@@ -377,19 +377,19 @@ private struct FolderSettings: View {
         .onChange(of: state.model.status) { state.statusChanged() }
         .confirmationDialog(removalTitle, isPresented: Binding(get: { removing != nil },
                                                                set: { if !$0 { removing = nil } })) {
-            Button("Remove", role: .destructive) {
+            Button("Remover", role: .destructive) {
                 guard let removing else { return }
                 state.app.removeFolder(URL(fileURLWithPath: removing.path))
                 Task { await state.refresh() }
             }
         } message: {
-            Text("Its \(removing?.files.formatted() ?? "") files leave the index. Adding it back later indexes them "
-                 + "again.")
+            Text("Os \(removing?.files.formatted() ?? "") arquivos dela saem do índice. Adicioná-la novamente mais tarde os indexa "
+                 + "de novo.")
         }
     }
 
     private var removalTitle: String {
-        "Stop searching “\(removing.map { ($0.path as NSString).lastPathComponent } ?? "")”?"
+        "Parar de buscar em “\(removing.map { ($0.path as NSString).lastPathComponent } ?? "")”?"
     }
 
     /// One end of the set hours, as a time of day for a date picker.
@@ -415,7 +415,7 @@ private struct TypeExclusions: View {
     @FocusState private var focused: Bool
 
     var body: some View {
-        TextField("Extensions", text: $text, prompt: Text("e.g. heic, txt"))
+        TextField("Extensões", text: $text, prompt: Text("ex.: heic, txt"))
             .labelsHidden()
             .focused($focused)
             .onSubmit { apply(text) }
@@ -443,7 +443,7 @@ private struct IndexProgress: View {
             }
             Spacer()
             if model.hasFolders {
-                Button(model.status.paused ? "Resume" : "Pause", action: togglePause)
+                Button(model.status.paused ? "Retomar" : "Pausar", action: togglePause)
             }
         }
     }
@@ -451,12 +451,12 @@ private struct IndexProgress: View {
     /// "357 of 365 files searchable · 8 waiting · 2 long files to finish"
     private var detail: String {
         let status = model.status
-        var text = "\(status.searchable.formatted()) of \(status.files.formatted()) files searchable"
-        if status.pending > 0 { text += " · \(status.pending.formatted()) waiting" }
+        var text = "\(status.searchable.formatted()) de \(status.files.formatted()) arquivos pesquisáveis"
+        if status.pending > 0 { text += " · \(status.pending.formatted()) aguardando" }
         if status.unfinished > 0 {
-            text += " · \(status.unfinished.formatted()) long \(status.unfinished == 1 ? "file" : "files") to finish"
+            text += " · \(status.unfinished.formatted()) \(status.unfinished == 1 ? "arquivo longo" : "arquivos longos") a concluir"
         }
-        if model.download.isActive { text += " · model \(model.download.progressText)" }
+        if model.download.isActive { text += " · modelo \(model.download.progressText)" }
         return text
     }
 }
@@ -476,14 +476,14 @@ private struct FolderStatusRow: View {
                 HStack(spacing: 6) {
                     Text((summary.path as NSString).lastPathComponent).font(.system(size: 13, weight: .semibold))
                     if summary.missing || summary.unreadable {
-                        Text(summary.missing ? "Not connected" : "No access")
+                        Text(summary.missing ? "Não conectada" : "Sem acesso")
                             .font(.system(size: 10, weight: .semibold))
                             .padding(.horizontal, 6)
                             .padding(.vertical, 1)
                             .background(Capsule().fill(Color.orange.opacity(0.2)))
                     }
                     if summary.unreadable {
-                        Button("Allow in Settings…", action: openFolderPrivacySettings)
+                        Button("Permitir em Configurações…", action: openFolderPrivacySettings)
                             .buttonStyle(.link)
                             .font(.system(size: 11))
                     }
@@ -499,8 +499,8 @@ private struct FolderStatusRow: View {
             }
             Spacer(minLength: 8)
             VStack(alignment: .trailing, spacing: 2) {
-                Text(summary.missing || summary.unreadable ? "Kept for when it's back"
-                     : "\(summary.indexed.formatted()) of \(summary.files.formatted()) indexed")
+                Text(summary.missing || summary.unreadable ? "Mantida para quando voltar"
+                     : "\(summary.indexed.formatted()) de \(summary.files.formatted()) indexados")
                     .font(.system(size: 12, weight: .medium).monospacedDigit())
                 if !states.isEmpty {
                     if reasons.isEmpty {
@@ -515,7 +515,7 @@ private struct FolderStatusRow: View {
                             .foregroundStyle(.secondary)
                         }
                         .buttonStyle(.plain)
-                        .help("Why some files aren't searchable")
+                        .help("Por que alguns arquivos não são pesquisáveis")
                         .popover(isPresented: $showingReasons, arrowEdge: .bottom) {
                             VStack(alignment: .leading, spacing: 4) {
                                 ForEach(reasons, id: \.self) { Text($0) }
@@ -531,40 +531,40 @@ private struct FolderStatusRow: View {
                 Image(systemName: "minus.circle.fill").foregroundStyle(.secondary)
             }
             .buttonStyle(.plain)
-            .help("Stop searching this folder")
-            .accessibilityLabel("Remove \((summary.path as NSString).lastPathComponent)")
+            .help("Parar de buscar esta pasta")
+            .accessibilityLabel("Remover \((summary.path as NSString).lastPathComponent)")
         }
         .padding(.vertical, 2)
     }
 
     private var states: String {
-        [summary.pending > 0 ? "\(summary.pending.formatted()) waiting" : nil,
+        [summary.pending > 0 ? "\(summary.pending.formatted()) aguardando" : nil,
          summary.unfinished > 0
-            ? "\(summary.unfinished.formatted()) long \(summary.unfinished == 1 ? "file" : "files") to finish" : nil,
-         summary.skipped > 0 ? "\(summary.skipped.formatted()) skipped" : nil,
-         summary.failed > 0 ? "\(summary.failed.formatted()) couldn't be read" : nil,
-         summary.leftOutCount > 0 ? "\(summary.leftOutCount.formatted()) not read" : nil].compactMap { $0 }
+            ? "\(summary.unfinished.formatted()) \(summary.unfinished == 1 ? "arquivo longo" : "arquivos longos") a concluir" : nil,
+         summary.skipped > 0 ? "\(summary.skipped.formatted()) ignorados" : nil,
+         summary.failed > 0 ? "\(summary.failed.formatted()) não puderam ser lidos" : nil,
+         summary.leftOutCount > 0 ? "\(summary.leftOutCount.formatted()) não lidos" : nil].compactMap { $0 }
             .joined(separator: " · ")
     }
 
     /// One line per reason: what the crawl never queued from this folder, then what was skipped once read.
     private var reasons: [String] {
         let crawl: [String: String] = [
-            "other type": "of types DigUp doesn't read",
-            "app or bundle": "inside apps or bundles",
-            "Photos library": "in a Photos library (its photos aren't read yet)",
-            "link or special file": "links or special files",
-            "in the cloud, not downloaded": "only in the cloud, not downloaded",
-            "inside a code project": "inside code projects, where only screenshots count",
-            "dataset": "in folders that look like datasets",
-            "code or data file": "code or data files",
-            "excluded type": "of the file types you skip",
+            "other type": "de tipos que o DigUp não lê",
+            "app or bundle": "dentro de apps ou pacotes",
+            "Photos library": "em uma biblioteca do Fotos (suas fotos ainda não são lidas)",
+            "link or special file": "links ou arquivos especiais",
+            "in the cloud, not downloaded": "apenas na nuvem, não baixados",
+            "inside a code project": "dentro de projetos de código, onde apenas capturas de tela contam",
+            "dataset": "em pastas que parecem conjuntos de dados",
+            "code or data file": "arquivos de código ou dados",
+            "excluded type": "dos tipos de arquivo que você ignora",
         ]
         let leftOut = summary.leftOut.sorted { $0.value > $1.value }.map { reason, count in
-            reason.hasPrefix("folders ") ? "\(count.formatted()) folders weren't opened (\(reason.dropFirst(8)))"
+            reason.hasPrefix("folders ") ? "\(count.formatted()) pastas não foram abertas (\(reason.dropFirst(8)))"
                 : "\(count.formatted()) \(crawl[reason] ?? reason)"
         }
-        let skipped = summary.skippedReasons.sorted { $0.value > $1.value }.map { "\($1.formatted()) skipped: \($0)" }
+        let skipped = summary.skippedReasons.sorted { $0.value > $1.value }.map { "\($1.formatted()) ignorados: \($0)" }
         return leftOut + skipped
     }
 }
@@ -580,59 +580,59 @@ private struct StorageSettings: View {
                 }
                 LabeledContent("Status") {
                     HStack(spacing: 8) {
-                        Text(state.model.download.isReady ? "Downloaded" : state.model.download.progressText)
+                        Text(state.model.download.isReady ? "Baixado" : state.model.download.progressText)
                         switch state.model.download.phase {
                         case .needed, .failed:
-                            Button("Download") { state.model.download.start() }.controlSize(.small)
-                            Button("Use Files…") { state.model.download.chooseFiles(for: NSApp.keyWindow) }
+                            Button("Baixar") { state.model.download.start() }.controlSize(.small)
+                            Button("Usar arquivos…") { state.model.download.chooseFiles(for: NSApp.keyWindow) }
                                 .controlSize(.small)
                         default:
                             EmptyView()
                         }
                     }
                 }
-                LabeledContent("Location") {
+                LabeledContent("Local") {
                     PathButton(url: state.model.settings.modelsDirectory)
                 }
             } header: {
-                Text("Model")
+                Text("Modelo")
             } footer: {
                 if !state.model.download.isReady {
                     HStack(alignment: .firstTextBaseline) {
-                        Text("If your network blocks Hugging Face, download the two files on another network and "
-                             + "click Use Files… to choose them. DigUp checks them before it uses them.")
+                        Text("Se sua rede bloqueia o Hugging Face, baixe os dois arquivos em outra rede e "
+                             + "clique em Usar arquivos… para escolhê-los. O DigUp os verifica antes de usá-los.")
                             .font(.system(size: 11))
                             .foregroundStyle(.secondary)
                             .fixedSize(horizontal: false, vertical: true)
                         Spacer()
-                        Button("Copy Links") {
+                        Button("Copiar links") {
                             NSPasteboard.general.clearContents()
                             NSPasteboard.general.setString(ModelDownload.links, forType: .string)
                         }
                         .controlSize(.small)
-                        .help("Copies the addresses of the two files")
+                        .help("Copia os endereços dos dois arquivos")
                     }
                 }
             }
-            Section("Index") {
-                LabeledContent("Size on disk", value: bytes(state.indexSize))
+            Section("Índice") {
+                LabeledContent("Tamanho no disco", value: bytes(state.indexSize))
                 if state.model.hasCode {
-                    LabeledContent("Code index", value: bytes(state.codeIndexSize))
+                    LabeledContent("Índice de código", value: bytes(state.codeIndexSize))
                 }
-                LabeledContent("Location") {
+                LabeledContent("Local") {
                     PathButton(url: state.model.settings.indexDirectory)
                 }
             }
-            Section("Privacy") {
-                Text("DigUp reads the folders you choose and keeps what it learns in its index, on this Mac. "
-                     + "It goes online only to download its model, once, and to check for updates (General), "
-                     + "which sends nothing about your files.")
+            Section("Privacidade") {
+                Text("O DigUp lê as pastas que você escolhe e guarda o que aprende em seu índice, neste Mac. "
+                     + "Ele só acessa a internet para baixar seu modelo, uma vez, e para verificar atualizações (Geral), "
+                     + "o que não envia nada sobre seus arquivos.")
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
             }
             Section {
                 Text("DigUp \(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "") · "
-                     + "EmbeddingGemma 2 by Google (Apache 2.0), run by llama.cpp (MIT).")
+                     + "EmbeddingGemma 2 da Google (Apache 2.0), executado por llama.cpp (MIT).")
                     .font(.system(size: 11))
                     .foregroundStyle(.secondary)
             }
@@ -652,10 +652,10 @@ private struct CodeSettings: View {
         Form {
             Section {
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("Search your code").font(.system(size: 13, weight: .semibold))
-                    Text("Find code by what it does, or by a name in it: type code: in the search panel, as in "
-                         + "“code: retry with backoff”. Code has an index of its own, and it never shows up in "
-                         + "other searches.")
+                    Text("Busque seu código").font(.system(size: 13, weight: .semibold))
+                    Text("Encontre código pelo que ele faz ou por um nome nele: digite code: no painel de busca, como "
+                         + "“code: retry with backoff”. O código tem um índice próprio e nunca aparece em "
+                         + "outras buscas.")
                         .font(.system(size: 11))
                         .foregroundStyle(.secondary)
                         .fixedSize(horizontal: false, vertical: true)
@@ -677,18 +677,18 @@ private struct CodeSettings: View {
             }
             Section {
                 if state.codeSummaries.isEmpty {
-                    Text("No code folders yet. Add the folders that hold your projects.")
+                    Text("Nenhuma pasta de código ainda. Adicione as pastas que contêm seus projetos.")
                         .foregroundStyle(.secondary)
                 }
                 ForEach(state.codeSummaries) { summary in
                     FolderStatusRow(summary: summary) { removing = summary }
                 }
             } header: {
-                Text("Code folders")
+                Text("Pastas de código")
             } footer: {
                 HStack {
                     Button(action: state.addCodeFolders) {
-                        Label(state.model.hasCode ? "Add Folders…" : "Choose Code Folders…", systemImage: "plus")
+                        Label(state.model.hasCode ? "Adicionar pastas…" : "Escolher pastas de código…", systemImage: "plus")
                     }
                     Spacer()
                 }
@@ -709,53 +709,53 @@ private struct CodeSettings: View {
                                 Image(systemName: "minus.circle.fill").foregroundStyle(.secondary)
                             }
                             .buttonStyle(.plain)
-                            .help("Search this folder's code again")
+                            .help("Buscar o código desta pasta novamente")
                         }
                     }
                     if state.model.settings.codeExcluded.isEmpty {
-                        Text("None. What git ignores, vendored and generated code are skipped anyway.")
+                        Text("Nenhuma. O que o git ignora e o código de terceiros e gerado são ignorados de qualquer forma.")
                             .foregroundStyle(.secondary)
                     }
                 } header: {
-                    Text("Skip these folders")
+                    Text("Ignorar estas pastas")
                 } footer: {
                     HStack {
                         Button {
-                            state.app.pickFolders(for: NSApp.keyWindow, prompt: "Skip") { folders in
+                            state.app.pickFolders(for: NSApp.keyWindow, prompt: "Ignorar") { folders in
                                 guard !folders.isEmpty else { return }
                                 let excluded = state.model.settings.codeExcluded
                                 state.app.applyCodeFolders(state.model.settings.codeRoots,
                                                            excluded: excluded + folders.filter { !excluded.contains($0) })
                             }
                         } label: {
-                            Label("Skip a Folder…", systemImage: "plus")
+                            Label("Ignorar uma pasta…", systemImage: "plus")
                         }
                         Spacer()
                     }
                 }
             }
             Section {
-                Picker("Open code in", selection: Binding(get: { CodeEditor.chosen(state.model.settings.codeEditor).id },
+                Picker("Abrir código em", selection: Binding(get: { CodeEditor.chosen(state.model.settings.codeEditor).id },
                                                           set: { state.app.setCodeEditor($0) })) {
                     ForEach(CodeEditor.installed) { editor in Text(editor.name).tag(editor.id) }
                     Text(CodeEditor.defaultApp.name).tag(CodeEditor.defaultApp.id)
                 }
             } footer: {
-                Text("A result opens there at the line that matched. Space shows the whole file in Quick Look.")
+                Text("Um resultado abre lá na linha correspondente. Space mostra o arquivo inteiro na Prévia Rápida.")
                     .font(.system(size: 11))
                     .foregroundStyle(.secondary)
             }
             Section {
-                Text("The code index keeps your code's text on this Mac, as the main index keeps your documents'. "
-                     + "It skips what git ignores, vendored and generated code, data files, and anything that looks "
-                     + "like a key or a password.")
+                Text("O índice de código mantém o texto do seu código neste Mac, assim como o índice principal mantém seus documentos. "
+                     + "Ele ignora o que o git ignora, código de terceiros e gerado, arquivos de dados e qualquer coisa que pareça "
+                     + "uma chave ou uma senha.")
                     .font(.system(size: 11))
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
                 if state.model.hasCode {
                     HStack {
                         Spacer()
-                        Button("Turn Off Code Search…", role: .destructive) { turningOff = true }
+                        Button("Desativar busca de código…", role: .destructive) { turningOff = true }
                     }
                 }
             }
@@ -763,23 +763,23 @@ private struct CodeSettings: View {
         .formStyle(.grouped)
         .scrollDisabled(true)
         .onChange(of: state.model.status) { state.statusChanged() }
-        .confirmationDialog("Turn off code search?", isPresented: $turningOff) {
-            Button("Turn Off", role: .destructive) {
+        .confirmationDialog("Desativar a busca de código?", isPresented: $turningOff) {
+            Button("Desativar", role: .destructive) {
                 state.app.applyCodeFolders([], excluded: [])
                 Task { await state.refresh() }
             }
         } message: {
-            Text("The code index (\(bytes(state.codeIndexSize))) is deleted. Turning it on again reads the code again.")
+            Text("O índice de código (\(bytes(state.codeIndexSize))) é excluído. Ativá-lo novamente lê o código de novo.")
         }
-        .confirmationDialog("Stop searching the code in “\(removing.map { ($0.path as NSString).lastPathComponent } ?? "")”?",
+        .confirmationDialog("Parar de buscar o código em “\(removing.map { ($0.path as NSString).lastPathComponent } ?? "")”?",
                             isPresented: Binding(get: { removing != nil }, set: { if !$0 { removing = nil } })) {
-            Button("Remove", role: .destructive) {
+            Button("Remover", role: .destructive) {
                 guard let removing else { return }
                 state.app.removeCodeFolder(URL(fileURLWithPath: removing.path))
                 Task { await state.refresh() }
             }
         } message: {
-            Text("Its \(removing?.files.formatted() ?? "") code files leave the code index.")
+            Text("Os \(removing?.files.formatted() ?? "") arquivos de código dela saem do índice de código.")
         }
     }
 }
@@ -798,6 +798,6 @@ private struct PathButton: View {
             }
         }
         .buttonStyle(.plain)
-        .help("Show in Finder")
+        .help("Mostrar no Finder")
     }
 }

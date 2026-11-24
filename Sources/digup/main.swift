@@ -9,48 +9,48 @@ signal(SIGPIPE, SIG_IGN)   // a dead worker must surface as an error, not kill u
 #endif
 
 let usage = """
-    digup: search your files by meaning (DigUp developer CLI)
+    digup: busque seus arquivos por significado (CLI de desenvolvedor do DigUp)
 
-      digup estimate <folder>... [--json]     what would be indexed, and how long the first pass takes
-      digup index <folder>... [--limit N]     sync the index with these folders, embed what's new, then the rest
-                                              of long PDFs and documents
-      digup search <words>... [--kind K,K] [-n 10] [--json]
-                                              "code: <words>" searches the code index
-      digup status                            what's in the index
+      digup estimate <pasta>... [--json]     o que seria indexado e quanto tempo leva a primeira passagem
+      digup index <pasta>... [--limit N]     sincroniza o índice com estas pastas, gera embeddings do que há de novo e,
+                                              depois, do restante de PDFs e documentos longos
+      digup search <palavras>... [--kind K,K] [-n 10] [--json]
+                                              "code: <palavras>" busca no índice de código
+      digup status                            o que há no índice
       digup speed [--model [--if-needed] [--when-quiet S] [--tries N]] [--json]
-                                              this machine's speed next to the M4 Pro behind the estimates, and
-                                              what indexing has measured here (costs.json in the index folder);
-                                              --model times the model itself (Linux and Windows) and keeps it
-      digup eval <queries.json> [-n 10]       recall of known answers (see evals/; "code: …" queries search code)
-      digup index-service <folder>... [--code-root DIR]... [--code-exclude DIR]... [--backfill] [--prune]
+                                              a velocidade desta máquina comparada à do M4 Pro usada nas estimativas e
+                                              o que a indexação mediu aqui (costs.json na pasta do índice);
+                                              --model cronometra o modelo em si (Linux e Windows) e o mantém
+      digup eval <queries.json> [-n 10]       recuperação das respostas conhecidas (veja evals/; consultas "code: …" buscam código)
+      digup index-service <pasta>... [--code-root DIR]... [--code-exclude DIR]... [--backfill] [--prune]
                           [--memory-limit MB] [--time-limit S]
-                                              the app's indexing helper (JSON lines; see IndexService); it stops
-                                              on a file whose reading passes the limits (see Watchdog)
-      digup worker [--text-only]              the model as a process (JSON lines; the app's query encoder)
-      digup search-service <folder>... [--code-root DIR]... [--encoder-idle S]
-                                              the searcher as a process, index open and encoder warm (JSON lines;
-                                              see SearchService): for shells that can't link DigUpKit
-      digup download-model [--to DIR]         the model files, from the Hugging Face cache or downloaded with
-                                              resume, checked (JSON lines: see DownloadModel)
+                                              o auxiliar de indexação do app (linhas JSON; veja IndexService); para
+                                              em um arquivo cuja leitura ultrapassa os limites (veja Watchdog)
+      digup worker [--text-only]              o modelo como processo (linhas JSON; codificador de consultas do app)
+      digup search-service <pasta>... [--code-root DIR]... [--encoder-idle S]
+                                              o buscador como processo, índice aberto e codificador aquecido (linhas JSON;
+                                              veja SearchService): para shells que não podem vincular o DigUpKit
+      digup download-model [--to DIR]         os arquivos do modelo, do cache do Hugging Face ou baixados com
+                                              retomada e verificados (linhas JSON: veja DownloadModel)
 
-    Options:
-      --index DIR          index folder (default: DigUp's Application Support folder; see `digup status`)
-      --code               estimate, index or show the code index of these folders (code.sqlite in the index
-                           folder): source files, their repos' docs and notebooks, minus what git ignores
-      --kind K,K           screenshot, image, pdf, doc, audio, video
-      --include-code       also index loose source code and data files as documents (outside code projects)
-      --include-datasets   don't skip folders that look like datasets
-      --exclude DIR        don't index this folder (repeatable)
-      --exclude-ext EXT    don't index files with this extension (repeatable, or comma-separated: "heic,txt")
-      --reindex            drop vectors and embed everything again (after changing settings or model)
-      --zgate Z            how far a meaning match must stand out (default 2.0)
-      --word-weight W      bonus for containing all of the query's words (default 2.0, and for code see Searcher)
-      --shot-tokens N      vision tokens per screenshot (default 280; 560 was 2× slower, no better on real shots)
-      --code-stretch N     characters a stretch of code holds at most (default 1800; 1200 and 3600 lost on the evals)
+    Opções:
+      --index DIR          pasta do índice (padrão: a pasta Application Support do DigUp; veja `digup status`)
+      --code               estimar, indexar ou mostrar o índice de código destas pastas (code.sqlite na pasta
+                           do índice): arquivos-fonte, os documentos e notebooks de seus repositórios, menos o que o git ignora
+      --kind K,K           tipos: screenshot, image, pdf, doc, audio, video
+      --include-code       também indexar arquivos de código e dados soltos como documentos (fora de projetos de código)
+      --include-datasets   não ignorar pastas que parecem conjuntos de dados
+      --exclude DIR        não indexar esta pasta (repetível)
+      --exclude-ext EXT    não indexar arquivos com esta extensão (repetível ou separados por vírgula: "heic,txt")
+      --reindex            descartar os vetores e gerar embeddings de tudo de novo (após alterar configurações ou modelo)
+      --zgate Z            o quanto uma correspondência por significado precisa se destacar (padrão 2.0)
+      --word-weight W      bônus por conter todas as palavras da consulta (padrão 2.0; para código, veja Searcher)
+      --shot-tokens N      tokens de visão por captura de tela (padrão 280; 560 era 2× mais lento, sem ganho em capturas reais)
+      --code-stretch N     máximo de caracteres em um trecho de código (padrão 1800; 1200 e 3600 foram piores nos evals)
 
-    The model: EmbeddingGemma 2 on llama.cpp, from $DIGUP_MODELS (only there, when set), else
-    ~/Library/Application Support/DigUp/Models or the Hugging Face cache. DIGUP_WORKER_DIR=worker uses the
-    mlx-vlm reference worker instead (evals).
+    O modelo: EmbeddingGemma 2 sobre llama.cpp, de $DIGUP_MODELS (apenas lá, quando definido), senão
+    ~/Library/Application Support/DigUp/Models ou o cache do Hugging Face. DIGUP_WORKER_DIR=worker usa o
+    worker de referência mlx-vlm (evals).
     """
 
 struct CLIError: Error, CustomStringConvertible {
@@ -73,7 +73,7 @@ struct Arguments {
         while index < raw.endIndex {
             let argument = raw[index]
             if Self.valued.contains(argument) || Self.repeated.contains(argument) {
-                guard index + 1 < raw.endIndex else { throw CLIError("\(argument) needs a value") }
+                guard index + 1 < raw.endIndex else { throw CLIError("\(argument) precisa de um valor") }
                 if Self.repeated.contains(argument) {
                     lists[argument, default: []].append(raw[index + 1])
                 } else {
@@ -115,11 +115,11 @@ struct Arguments {
     }
 
     func folders() throws -> [URL] {
-        guard !positional.isEmpty else { throw CLIError("which folders? e.g. digup index ~/DigUpTestbed") }
+        guard !positional.isEmpty else { throw CLIError("quais pastas? p.ex. digup index ~/DigUpTestbed") }
         return try positional.map {
             let url = Self.folderURL($0)
-            guard Self.isFolder(url) else { throw CLIError("not a folder: \($0)") }
-            guard Self.isReadable(url) else { throw CLIError("can't read \($0) (macOS privacy settings?)") }
+            guard Self.isFolder(url) else { throw CLIError("não é uma pasta: \($0)") }
+            guard Self.isReadable(url) else { throw CLIError("não é possível ler \($0) (configurações de privacidade do macOS?)") }
             return url
         }
     }
@@ -146,7 +146,7 @@ struct Arguments {
         guard let list = values["--kind"] else { return nil }
         return Set(try list.split(separator: ",").map {
             guard let kind = FileKind(rawValue: $0.trimmingCharacters(in: .whitespaces)) else {
-                throw CLIError("unknown kind \($0); use screenshot, image, pdf, doc, audio, video")
+                throw CLIError("tipo desconhecido \($0); use screenshot, image, pdf, doc, audio, video")
             }
             return kind
         })
@@ -178,11 +178,11 @@ func clock(_ seconds: Double) -> String {
 func location(_ hit: SearchHit) -> String {
     switch hit.segment {
     case .page, .pageImage: hit.loc.map { "p. \(Int($0))" } ?? ""
-    case .audio, .frame: hit.loc.map { "at \(clock($0))" + (hit.segment == .audio ? " (sound)" : "") } ?? ""
-    case .chunk: hit.loc.map { "part \(Int($0))" } ?? ""
-    case .lines: hit.loc.map { "lines \(Int($0))–\(Int(hit.locEnd ?? $0))" + (hit.focus.map { ", opens at \(Int($0))" } ?? "") } ?? ""
-    case .cells: hit.loc.map { $0 == hit.locEnd ? "cell \(Int($0))" : "cells \(Int($0))–\(Int(hit.locEnd ?? $0))" } ?? ""
-    case .ocr: "text in image"
+    case .audio, .frame: hit.loc.map { "em \(clock($0))" + (hit.segment == .audio ? " (áudio)" : "") } ?? ""
+    case .chunk: hit.loc.map { "parte \(Int($0))" } ?? ""
+    case .lines: hit.loc.map { "linhas \(Int($0))–\(Int(hit.locEnd ?? $0))" + (hit.focus.map { ", abre em \(Int($0))" } ?? "") } ?? ""
+    case .cells: hit.loc.map { $0 == hit.locEnd ? "célula \(Int($0))" : "células \(Int($0))–\(Int(hit.locEnd ?? $0))" } ?? ""
+    case .ocr: "texto na imagem"
     default: ""
     }
 }
@@ -209,7 +209,7 @@ func embedderSource() -> String? {
 }
 
 func estimate(_ args: Arguments) throws {
-    guard !args.positional.isEmpty else { throw CLIError("which folders? e.g. digup estimate ~/Documents") }
+    guard !args.positional.isEmpty else { throw CLIError("quais pastas? p.ex. digup estimate ~/Documents") }
     let options = args.options
     // What indexing costs on this machine: as measured by indexing here, kind by kind, once there's enough of it;
     // until then the M4 Pro's fixed costs, scaled by a second's speed check (done once and kept beside the index).
@@ -230,7 +230,7 @@ func estimate(_ args: Arguments) throws {
                 emit(["folder": folder.path, "readable": false, "seconds": 0, "files": [String: Int](),
                       "pdf_pages": 0, "audio_seconds": 0, "video_seconds": 0])
             } else {
-                print("\(tilde(folder.path))    can't read it (not there, or not allowed in macOS privacy settings)")
+                print("\(tilde(folder.path))    não é possível ler (não existe ou não há permissão nas configurações de privacidade do macOS)")
             }
             continue
         }
@@ -269,34 +269,37 @@ func estimate(_ args: Arguments) throws {
         for kind in FileKind.allCases {
             guard let count = estimate.files[kind], count > 0 else { continue }
             switch kind {
-            case .pdf: kinds.append("\(number(count)) PDFs (\(number(estimate.pdfPagesTotal)) pages; \(number(estimate.pdfPages)) in the first pass)")
-            case .audio: kinds.append("\(number(count)) audio (\(duration(estimate.audioSeconds)))")
-            case .video: kinds.append("\(number(count)) video (\(duration(estimate.videoSeconds)))")
-            case .code: kinds.append("\(number(count)) code \(count == 1 ? "file" : "files") "
-                                     + "(\(number(estimate.codeStretches)) stretches)")
-            default: kinds.append("\(number(count)) \(kind.rawValue)\(count == 1 ? "" : "s")")
+            case .pdf: kinds.append("\(number(count)) PDFs (\(number(estimate.pdfPagesTotal)) páginas; \(number(estimate.pdfPages)) na primeira passagem)")
+            case .audio: kinds.append("\(number(count)) áudio (\(duration(estimate.audioSeconds)))")
+            case .video: kinds.append("\(number(count)) vídeo (\(duration(estimate.videoSeconds)))")
+            case .code: kinds.append("\(number(count)) \(count == 1 ? "arquivo de código" : "arquivos de código") "
+                                     + "(\(number(estimate.codeStretches)) trechos)")
+            case .screenshot: kinds.append("\(number(count)) captura\(count == 1 ? "" : "s") de tela")
+            case .image: kinds.append("\(number(count)) imagem\(count == 1 ? "" : "s")")
+            case .doc: kinds.append("\(number(count)) documento\(count == 1 ? "" : "s")")
+            default: kinds.append("\(number(count)) \(kind.rawValue)")
             }
         }
-        print("\(tilde(folder.path))    first index ≈ \(duration(estimate.seconds))"
-              + (args.code ? ", index ≈ \(ByteCountFormatter.string(fromByteCount: Int64(estimate.bytes), countStyle: .file))" : ""))
-        print("  " + (kinds.isEmpty ? "nothing to index" : kinds.joined(separator: " · ")))
+        print("\(tilde(folder.path))    primeira indexação ≈ \(duration(estimate.seconds))"
+              + (args.code ? ", índice ≈ \(ByteCountFormatter.string(fromByteCount: Int64(estimate.bytes), countStyle: .file))" : ""))
+        print("  " + (kinds.isEmpty ? "nada para indexar" : kinds.joined(separator: " · ")))
         if estimate.longFiles > 0 {
-            print("  then the rest of \(number(estimate.longFiles)) long \(estimate.longFiles == 1 ? "file" : "files") "
+            print("  depois o restante de \(number(estimate.longFiles)) \(estimate.longFiles == 1 ? "arquivo longo" : "arquivos longos") "
                   + "≈ \(duration(estimate.laterSeconds))")
         }
         if !subfolders.isEmpty {
-            print("  biggest subfolders: " + subfolders.prefix(5).map {
+            print("  maiores subpastas: " + subfolders.prefix(5).map {
                 "\(($0.key as NSString).lastPathComponent) ≈ \(duration($0.value.seconds))"
-            }.joined(separator: " · ") + (subfolders.count > 5 ? " · \(subfolders.count - 5) more" : ""))
+            }.joined(separator: " · ") + (subfolders.count > 5 ? " · \(subfolders.count - 5) a mais" : ""))
         }
-        if !crawl.skipped.isEmpty { print("  skipped: " + skippedLine(crawl.skipped)) }
-        if !crawl.skippedFolders.isEmpty { print("  folders not walked: " + skippedLine(crawl.skippedFolders)) }
+        if !crawl.skipped.isEmpty { print("  ignorados: " + skippedLine(crawl.skipped)) }
+        if !crawl.skippedFolders.isEmpty { print("  pastas não percorridas: " + skippedLine(crawl.skippedFolders)) }
         for (folder, count) in crawl.datasets.sorted(by: { $0.value > $1.value }) {
-            print("  looks like a dataset (skipped): \(tilde(folder)) (\(number(count)) files)")
+            print("  parece um conjunto de dados (ignorado): \(tilde(folder)) (\(number(count)) arquivos)")
         }
-        print(String(format: "  (looked at it in %.2f s)", Date().timeIntervalSince(started)))
+        print(String(format: "  (analisado em %.2f s)", Date().timeIntervalSince(started)))
     }
-    if args.positional.count > 1, !args.flags.contains("--json") { print("all together ≈ \(duration(total))") }
+    if args.positional.count > 1, !args.flags.contains("--json") { print("no total ≈ \(duration(total))") }
 }
 
 func index(_ args: Arguments) throws {
@@ -311,10 +314,10 @@ func index(_ args: Arguments) throws {
     try indexer.checkModel()
     let folders = try args.folders()
     let sync = try indexer.sync(folders)
-    print("index: \(tilde(store.file.path))")
-    print("sync: \(sync.added) new · \(sync.changed) changed · \(sync.moved) moved · \(sync.removed) removed · \(sync.unchanged) unchanged")
-    if !sync.crawl.skipped.isEmpty { print("skipped: " + skippedLine(sync.crawl.skipped)) }
-    for (folder, count) in sync.crawl.datasets { print("looks like a dataset (skipped): \(tilde(folder)) (\(number(count)) files)") }
+    print("índice: \(tilde(store.file.path))")
+    print("sincronização: \(sync.added) novos · \(sync.changed) alterados · \(sync.moved) movidos · \(sync.removed) removidos · \(sync.unchanged) inalterados")
+    if !sync.crawl.skipped.isEmpty { print("ignorados: " + skippedLine(sync.crawl.skipped)) }
+    for (folder, count) in sync.crawl.datasets { print("parece um conjunto de dados (ignorado): \(tilde(folder)) (\(number(count)) arquivos)") }
 
     let limit = args.values["--limit"].flatMap(Int.init)
     var started = Date()
@@ -325,9 +328,9 @@ func index(_ args: Arguments) throws {
               + String(format: "%5.2fs  ", event.seconds) + name + note)
     })
     if states.isEmpty {
-        print("nothing pending")
+        print("nada pendente")
     } else {
-        print("done in \(duration(Date().timeIntervalSince(started))): " + statesLine(states))
+        print("concluído em \(duration(Date().timeIntervalSince(started))): " + statesLine(states))
     }
     // The rest of long files, as the app does once nothing is pending (not after a --limit run: things still are).
     guard limit == nil, try store.unfinishedCount().files > 0 else { return }
@@ -335,11 +338,11 @@ func index(_ args: Arguments) throws {
     let finished = try indexer.finishLongFiles(onStep: { step in
         let name = (step.path as NSString).lastPathComponent
         let note = step.note.map { "  (\($0))" } ?? ""
-        print("[rest \(lpad("\(step.done)", 5))/\(step.total)] \(pad(step.kind.rawValue, 4)) \(pad(step.state, 7)) "
+        print("[resto \(lpad("\(step.done)", 5))/\(step.total)] \(pad(step.kind.rawValue, 4)) \(pad(step.state, 7)) "
               + String(format: "%5.2fs  ", step.seconds) + name + note)
     })
-    print("the rest of long files in \(duration(Date().timeIntervalSince(started))): "
-          + (finished.isEmpty ? "none finished" : statesLine(finished)))
+    print("o restante dos arquivos longos em \(duration(Date().timeIntervalSince(started))): "
+          + (finished.isEmpty ? "nenhum concluído" : statesLine(finished)))
 }
 
 func statesLine(_ states: [String: Int]) -> String {
@@ -354,17 +357,17 @@ func queryVectors(_ queries: [String], store: IndexStore, searcher: Searcher,
     let worker = try makeEmbedder(textOnly: true, log: store.directory.appendingPathComponent("worker-query.log"))
     defer { worker.close() }
     if let source = searcher.vectorSource, source != worker.info.vectorSource {
-        throw CLIError("index vectors come from \(source) but the query encoder is \(worker.info.vectorSource)")
+        throw CLIError("os vetores do índice vêm de \(source), mas o codificador de consultas é \(worker.info.vectorSource)")
     }
     return try worker.embedTexts(queries.map(prompt))
 }
 
 func search(_ args: Arguments) throws {
     var query = args.positional.joined(separator: " ")
-    guard !query.isEmpty else { throw CLIError("search for what?") }
+    guard !query.isEmpty else { throw CLIError("buscar por quê?") }
     let code = CodeQuery.text(of: query)
     if let code { query = code }
-    guard !query.isEmpty else { throw CLIError("search the code for what?") }
+    guard !query.isEmpty else { throw CLIError("buscar no código por quê?") }
     let store = try IndexStore(directory: args.indexFolder, file: code == nil ? IndexStore.mainFile : IndexStore.codeFile)
     let searcher = try Searcher(store: store)
     let started = Date()
@@ -381,9 +384,9 @@ func search(_ args: Arguments) throws {
         print(String(data: data, encoding: .utf8) ?? "[]")
         return
     }
-    if hits.isEmpty { print("no good matches") }
+    if hits.isEmpty { print("nenhuma boa correspondência") }
     for (rank, hit) in hits.enumerated() {
-        let why = [hit.z.map { String(format: "z %.1f", $0) }, hit.keywordRank.map { "words #\($0)" }]
+        let why = [hit.z.map { String(format: "z %.1f", $0) }, hit.keywordRank.map { "palavras #\($0)" }]
             .compactMap { $0 }.joined(separator: ", ")
         let place = location(hit)
         print("\(lpad("\(rank + 1)", 2)). \(pad(hit.kind.rawValue, 10)) \((hit.path as NSString).lastPathComponent)"
@@ -391,26 +394,26 @@ func search(_ args: Arguments) throws {
         print("      \(tilde((hit.path as NSString).deletingLastPathComponent))")
         if let excerpt = hit.excerpt, !excerpt.isEmpty { print("      “\(excerpt.prefix(160))”") }
     }
-    print(String(format: "(%d vectors · query encoder %.2f s incl. start-up · search %.0f ms)", searcher.vectorCount,
+    print(String(format: "(%d vetores · codificador de consultas %.2f s incluindo a inicialização · busca %.0f ms)", searcher.vectorCount,
                  encoded.timeIntervalSince(started), searched.timeIntervalSince(encoded) * 1000))
 }
 
 func status(_ args: Arguments) throws {
     let store = try args.store()
     let counts = try store.counts()
-    print("index: \(tilde(store.file.path))")
-    print("vectors: \(number(counts.vectors)) in \(number(counts.segments)) segments")
+    print("índice: \(tilde(store.file.path))")
+    print("vetores: \(number(counts.vectors)) em \(number(counts.segments)) segmentos")
     for kind in FileKind.allCases {
         guard let states = counts.byKindAndState[kind.rawValue] else { continue }
         let total = states.values.reduce(0, +)
         print("  \(pad(kind.rawValue, 11)) \(lpad(number(total), 6))   " + statesLine(states))
     }
     if counts.unfinished > 0 {
-        print("long files still being read: \(number(counts.unfinished)) (\(number(counts.left)) pages and chunks left)")
+        print("arquivos longos ainda em leitura: \(number(counts.unfinished)) (\(number(counts.left)) páginas e trechos restantes)")
     }
-    if let fingerprint = try store.meta("fingerprint") { print("built with: \(fingerprint)") }
-    print("this digup: llama.cpp \(LlamaEmbedder.buildTag), vectors \(LlamaEmbedder.vectorVersion)")
-    print("size: \(ByteCountFormatter.string(fromByteCount: IndexStore.size(of: store.file), countStyle: .file))")
+    if let fingerprint = try store.meta("fingerprint") { print("criado com: \(fingerprint)") }
+    print("este digup: llama.cpp \(LlamaEmbedder.buildTag), vetores \(LlamaEmbedder.vectorVersion)")
+    print("tamanho: \(ByteCountFormatter.string(fromByteCount: IndexStore.size(of: store.file), countStyle: .file))")
 }
 
 /// The app's indexing helper: sync + index on request, JSON events out (IndexService.swift).
@@ -460,25 +463,25 @@ func speed(_ args: Arguments) throws {
     if args.flags.contains("--model") { return try modelSpeed(args) }
     if let seconds = MeasuredCosts.Speed.measuredSeconds() {
         let speed = MeasuredCosts.Speed.compared(seconds)
-        print(String(format: "20 float16 matrix multiplies (2048²) %.3f s · Vision on a made-up screenshot %.3f s",
+        print(String(format: "20 multiplicações de matrizes float16 (2048²) %.3f s · Vision em uma captura de tela fictícia %.3f s",
                      seconds.multiplies, seconds.ocr))
-        print(String(format: "next to the M4 Pro behind the fixed costs: the model's work ×%.2f, OCR ×%.2f (1 = as fast)",
+        print(String(format: "comparado ao M4 Pro por trás dos custos fixos: trabalho do modelo ×%.2f, OCR ×%.2f (1 = tão rápido quanto)",
                      speed.embedding, speed.ocr))
     } else {
-        print("no speed check here (no Metal): the fixed costs stand in until indexing has measured this machine's")
+        print("não há verificação de velocidade aqui (sem Metal): os custos fixos valem até a indexação medir esta máquina")
     }
     let measured = MeasuredCosts.load(from: args.indexFolder)
-    print("measured by indexing (\(tilde(MeasuredCosts.file(in: args.indexFolder).path))):"
-          + (measured.tallies.isEmpty ? " nothing yet" : ""))
+    print("medido pela indexação (\(tilde(MeasuredCosts.file(in: args.indexFolder).path))):"
+          + (measured.tallies.isEmpty ? " ainda nada" : ""))
     for (name, tally) in measured.tallies.sorted(by: { $0.key < $1.key }) {
-        print(String(format: "  %@ %.4f s each, over %.0f", name, tally.seconds / tally.units, tally.units))
+        print(String(format: "  %@ %.4f s cada, em %.0f", name, tally.seconds / tally.units, tally.units))
     }
 }
 
 /// The model timed on the processor alone, in a process of its own (llama.cpp loads its backends once a process), with
 /// the vectors it made, and how long it took to load.
 func processorAlone(folder: URL, tries: Int) throws -> (measured: ModelSpeed.Measurement, load: Double) {
-    guard let program = Bundle.main.executableURL else { throw CLIError("where is digup?") }
+    guard let program = Bundle.main.executableURL else { throw CLIError("onde está o digup?") }
     let process = Process()
     process.executableURL = program
     process.arguments = ["speed", "--model", "--measure-only", "--json", "--tries", String(tries), "--index", folder.path]
@@ -493,7 +496,7 @@ func processorAlone(folder: URL, tries: Int) throws -> (measured: ModelSpeed.Mea
           let reply = try JSONSerialization.jsonObject(with: Data(line.utf8)) as? [String: Any],
           let seconds = reply["seconds"] as? [String: Double], let load = reply["load"] as? Double,
           let times = ModelSpeed.Times(fields: seconds)
-    else { throw CLIError("the processor's speed check failed") }
+    else { throw CLIError("a verificação de velocidade do processador falhou") }
     let vectors = (reply["vectors"] as? [String: [Double]] ?? [:]).mapValues { $0.map(Float.init) }
     return (ModelSpeed.Measurement(times: times, vectors: vectors, tries: reply["tries"] as? [Double] ?? [],
                                    steady: reply["steady"] as? Bool ?? true, others: reply["others"] as? Double ?? 0),
@@ -581,17 +584,17 @@ func modelSpeed(_ args: Arguments) throws {
         return
     }
     if quiet.waited > 0 {
-        print(String(format: "waited %.0f s for other programs to settle%@", quiet.waited, quiet.settled ? "" : " (they didn't)"))
+        print(String(format: "aguardou %.0f s para outros programas se estabilizarem%@", quiet.waited, quiet.settled ? "" : " (não se estabilizaram)"))
     }
-    if let device = speed.device { print("runs on the \(device == "cpu" ? "processor (faster here than the GPU)" : "GPU")") }
-    print(String(format: "the model loaded in %.2f s; the check took %.1f s; tries %@", load, total,
+    if let device = speed.device { print("executa no \(device == "cpu" ? "processador (mais rápido aqui que a GPU)" : "GPU")") }
+    print(String(format: "o modelo carregou em %.2f s; a verificação levou %.1f s; tentativas %@", load, total,
                  kept.tries.map { String(format: "%.2f s", $0) }.joined(separator: ", ")))
     for (name, seconds) in kept.times.fields.sorted(by: { $0.key < $1.key }) {
         let base = ModelSpeed.baseline.fields[name] ?? seconds
         print(String(format: "  %@ %.3f s (M4 Pro %.3f s, ×%.1f)", name, seconds, base, seconds / base))
     }
-    if speed.doubtful == true { print("in doubt (a busy moment): timed again at the next --if-needed") }
-    print("kept in \(tilde(MeasuredCosts.file(in: folder).path)): " + (speed.kinds ?? [:]).sorted { $0.key < $1.key }
+    if speed.doubtful == true { print("em dúvida (um momento de carga): cronometrado novamente no próximo --if-needed") }
+    print("salvo em \(tilde(MeasuredCosts.file(in: folder).path)): " + (speed.kinds ?? [:]).sorted { $0.key < $1.key }
         .map { String(format: "%@ ×%.1f", $0.key, $0.value) }.joined(separator: " · "))
 }
 
@@ -609,7 +612,7 @@ struct EvalFile: Decodable {
 }
 
 func evaluate(_ args: Arguments) throws {
-    guard let file = args.positional.first else { throw CLIError("which eval file?") }
+    guard let file = args.positional.first else { throw CLIError("qual arquivo de eval?") }
     let eval = try JSONDecoder().decode(EvalFile.self, from: Data(contentsOf: URL(fileURLWithPath: (file as NSString).expandingTildeInPath)))
     var base = (eval.base as NSString).expandingTildeInPath
     // The testbed kept elsewhere (another drive on Windows, wherever CI puts it): DIGUP_TESTBED stands for
@@ -672,7 +675,7 @@ func evaluate(_ args: Arguments) throws {
             byTag[key] = row
         }
         let top = hits.first.map { "\(($0.path as NSString).lastPathComponent)" + (location($0).isEmpty ? "" : " [\(location($0))]") } ?? "-"
-        print("\(rank.map { lpad("#\($0)", 4) } ?? "miss")  \(pad(tag, 11)) \(pad("“\(query.q)”", 42)) top: \(top)")
+        print("\(rank.map { lpad("#\($0)", 4) } ?? "erro")  \(pad(tag, 11)) \(pad("“\(query.q)”", 42)) melhor: \(top)")
     }
     print("")
     print("\(pad("tag", 12)) \(lpad("n", 3))  \(lpad("R@1", 5))  \(lpad("R@5", 5))  \(lpad("R@10", 5))  \(lpad("MRR", 5))")
@@ -682,9 +685,9 @@ func evaluate(_ args: Arguments) throws {
               Double(row.at1) / n, Double(row.at5) / n, Double(row.at10) / n, row.mrr / n))
     }
     let count = Double(max(1, eval.queries.count))
-    print(String(format: "weaker-matches fold (below 0.5× the top score): %.1f of %.1f results shown per query; ",
+    print(String(format: "agrupamento de correspondências mais fracas (abaixo de 0,5× a pontuação máxima): %.1f de %.1f resultados mostrados por consulta; ",
                  Double(shown) / count, Double(listed) / count)
-          + "\(folded) expected \(folded == 1 ? "answer" : "answers") folded")
+          + "\(folded) \(folded == 1 ? "resposta esperada agrupada" : "respostas esperadas agrupadas")")
 }
 
 // MARK: Main
@@ -735,6 +738,6 @@ do {
         exit(2)
     }
 } catch {
-    FileHandle.standardError.write(Data("error: \(error)\n".utf8))
+    FileHandle.standardError.write(Data("erro: \(error)\n".utf8))
     exit(1)
 }

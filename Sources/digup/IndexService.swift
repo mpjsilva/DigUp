@@ -237,7 +237,7 @@ final class IndexService: @unchecked Sendable {
                 "left_out": summary.crawl.leftOut,          // chosen folder → reason → files, for the Folders tab
             ])
         } catch {
-            emit(["event": "error", "message": "sync failed: \(error)", "code": part.code])
+            emit(["event": "error", "message": "falha na sincronização: \(error)", "code": part.code])
         }
     }
 

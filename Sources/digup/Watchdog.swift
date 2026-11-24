@@ -33,11 +33,11 @@ final class Watchdog: @unchecked Sendable {
                 Thread.sleep(forTimeInterval: 1)
                 let reading = Indexer.nowReading
                 if let footprint = Self.footprint(), footprint > memoryLimit {
-                    stop(reading?.path, why: "needed more than \(Self.size(memoryLimit)) of memory to read")
+                    stop(reading?.path, why: "precisou de mais de \(Self.size(memoryLimit)) de memória para ler")
                 }
                 if let reading, Date().timeIntervalSince(reading.since) > timeLimit {
-                    let limit = timeLimit >= 120 ? "\(Int(timeLimit / 60)) minutes" : "\(Int(timeLimit)) seconds"
-                    stop(reading.path, why: "took more than \(limit) to read")
+                    let limit = timeLimit >= 120 ? "\(Int(timeLimit / 60)) minutos" : "\(Int(timeLimit)) segundos"
+                    stop(reading.path, why: "levou mais de \(limit) para ler")
                 }
             }
         }
@@ -45,8 +45,8 @@ final class Watchdog: @unchecked Sendable {
 
     private func stop(_ path: String?, why: String) -> Never {
         StoppedFile(path: path, why: why).write(to: note)
-        emit(["event": "error", "message": "watchdog: \(why): \(path ?? "no file being read")"])
-        FileHandle.standardError.write(Data("watchdog: \(why): \(path ?? "no file being read")\n".utf8))
+        emit(["event": "error", "message": "watchdog: \(why): \(path ?? "nenhum arquivo em leitura")"])
+        FileHandle.standardError.write(Data("watchdog: \(why): \(path ?? "nenhum arquivo em leitura")\n".utf8))
         #if os(Windows)
         exit(StoppedFile.exitCode)
         #else

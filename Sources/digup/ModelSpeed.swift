@@ -69,7 +69,7 @@ enum ModelSpeed {
         let text = Prompts.document(title: "notes.txt", text: page)
 
         func embedded(_ result: [Embedding]) throws -> [Float]? {
-            if let problem = result.first?.error { throw CLIError("the speed check's input failed: \(problem)") }
+            if let problem = result.first?.error { throw CLIError("a entrada da verificação de velocidade falhou: \(problem)") }
             return result.first?.vector
         }
         var vectors: [String: [Float]] = [:]

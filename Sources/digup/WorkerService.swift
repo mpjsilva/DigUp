@@ -41,7 +41,7 @@ func workerService(_ args: Arguments) -> Int32 {
             case "audio":
                 embeddings = try embedder.embedAudio(inputs)
             case let op:
-                throw CLIError("unknown op \(op ?? "(none)")")
+                throw CLIError("operação desconhecida \(op ?? "(nenhuma)")")
             }
             // Float32 little-endian, one row per input; an input that failed gets zeros and a message.
             let floats = embeddings.flatMap { $0.vector ?? [Float](repeating: 0, count: info.dim) }

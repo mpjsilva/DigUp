@@ -1,22 +1,21 @@
 %global upstream_version 0.7.0-beta.3
 
-# Os binarios ja vem compilados do upstream. O pipeline padrao do Fedora
-# (find-debuginfo + brp-strip) alteraria os ELFs, quebrando a paridade com o
-# .deb oficial. Desativa-lo aqui e' seguro: nao ha nada para compilar ou
-# corrigir neste pacote.
+# Os binarios ja vem compilados (a partir do codigo-fonte traduzido deste fork).
+# O pipeline padrao do Fedora (find-debuginfo + brp-strip) alteraria os ELFs;
+# desativa-lo aqui e' seguro: nao ha nada para compilar ou corrigir neste pacote.
 %global _enable_debug_packages 0
 %global __spec_install_post %{nil}
 
-# O binario foi linkado contra o libcurl do Debian, que usa o no de versao
-# CURL_OPENSSL_4. O libcurl do Fedora/RHEL nao tem versoes de simbolo; o loader
-# do glibc resolve com um aviso (confirmado em teste). Remove-se o Requires
-# versionado gerado automaticamente e declara-se apenas o SONAME.
+# O .deb oficial era linkado contra o libcurl do Debian (no de versao
+# CURL_OPENSSL_4). O build local usa o libcurl do Fedora, sem versoes de simbolo.
+# O filtro abaixo cobre os dois casos: remove um eventual Requires versionado e
+# deixa apenas o SONAME simples.
 %global __requires_exclude ^libcurl.so.4.*CURL_OPENSSL_4.*$
 
 Name:           dig-up
 Version:        0.7.0~beta.3
 Release:        1%{?dist}
-Summary:        Search your files by what's in them, on your computer
+Summary:        Busque os arquivos do seu computador pelo que há dentro deles
 
 # O binario e' pre-compilado; os avisos de licencas de terceiros estao embutidos
 # no pacote (veja THIRD-PARTY-NOTICES.txt no %%files).
@@ -35,13 +34,13 @@ Requires:       hicolor-icon-theme
 Recommends:     vulkan-loader
 
 %description
-DigUp searches your computer by what's inside your files: photos, PDFs,
-documents, recordings, videos and code. Everything runs on-device using
-Google DeepMind's EmbeddingGemma 2 embeddings.
+O DigUp busca arquivos no seu computador pelo que há dentro deles: fotos, PDFs,
+documentos, gravações, vídeos e código. Tudo acontece no próprio aparelho, com
+os embeddings do EmbeddingGemma 2 do Google DeepMind.
 
-This RPM is a repackaging of the official v0.7.0-beta.3 Linux .deb release.
-The binaries are byte-for-byte the ones published upstream; only the package
-metadata and layout are adapted for RPM-based distributions.
+Este RPM foi compilado a partir do código-fonte traduzido para português
+brasileiro neste fork (branch rpm-packaging), e não dos binários oficiais em
+inglês. A interface, os menus e a ferramenta de linha de comando estão em PT-BR.
 
 
 %prep
@@ -96,3 +95,4 @@ fi
 %changelog
 * Tue Nov 24 2026 mpjsilva <mpjsilva@users.noreply.github.com> - 0.7.0~beta.3-1
 - Reempacotamento do .deb oficial do release v0.7.0-beta.3 para RPM.
+- Rebuild do código-fonte traduzido: interface e descrições em PT-BR.

@@ -22,7 +22,7 @@
     "active": true,
     "targets": "all",
     "category": "Utility",
-    "shortDescription": "Search your files by what's in them, on your computer",
+    "shortDescription": "Busque os arquivos do seu computador pelo que há dentro deles",
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",

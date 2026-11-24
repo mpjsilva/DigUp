@@ -47,6 +47,12 @@ const FIELD_HEIGHT: f64 = 56.0;
 /// The window's label.
 const WINDOW: &str = "main";
 
+/// The window icon: the same DigUp tile the .desktop file and the taskbar use. Tauri's default icon is not
+/// reliably picked up by GTK on Linux, so every decorated window sets it explicitly.
+fn window_icon() -> tauri::Result<tauri::image::Image<'static>> {
+    tauri::image::Image::from_bytes(include_bytes!("../icons/32x32.png"))
+}
+
 /// What the commands and events share.
 struct Shell {
     options: Options,
@@ -976,6 +982,7 @@ fn make_panel(app: &AppHandle, centered: bool) -> tauri::Result<()> {
     let (label, page) = if centered { (CENTERED_PANEL, "index.html?fills") } else { (PANEL, "index.html") };
     let panel = WebviewWindowBuilder::new(app, label, WebviewUrl::App(page.into()))
         .title("DigUp")
+        .icon(window_icon()?)?
         .inner_size(PANEL_WIDTH, FIELD_HEIGHT)
         .decorations(false)
         .transparent(true)
@@ -1083,6 +1090,7 @@ fn show_window(app: &AppHandle) -> tauri::Result<()> {
     let hidden = shell.options.debug_window.is_some() && !shell.options.debug_show;
     let mut builder = WebviewWindowBuilder::new(app, WINDOW, WebviewUrl::App("window.html".into()))
         .title("DigUp")
+        .icon(window_icon()?)?
         .min_inner_size(820.0, 520.0)
         .visible(false);
     // Where it was left, at the size it had, while that's still on a screen; else sized to this screen, centered.
@@ -1165,6 +1173,7 @@ fn show_code_folders(app: &AppHandle) -> tauri::Result<()> {
     }
     WebviewWindowBuilder::new(app, "code-folders", WebviewUrl::App("setup.html?code".into()))
         .title("Pastas de código")
+        .icon(window_icon()?)?
         .inner_size(720.0, 600.0)
         .resizable(false)
         .maximizable(false)
@@ -1183,6 +1192,7 @@ fn show_setup(app: &AppHandle) -> tauri::Result<()> {
     let hidden = app.state::<Arc<Shell>>().options.debug_setup;
     WebviewWindowBuilder::new(app, "setup", WebviewUrl::App("setup.html".into()))
         .title("Configurar o DigUp")
+        .icon(window_icon()?)?
         .inner_size(720.0, 600.0)
         .resizable(false)
         .maximizable(false)
@@ -1202,6 +1212,7 @@ fn show_settings(app: &AppHandle) -> tauri::Result<()> {
     let options = &app.state::<Arc<Shell>>().options;
     WebviewWindowBuilder::new(app, "settings", WebviewUrl::App("settings.html".into()))
         .title("Configurações do DigUp")
+        .icon(window_icon()?)?
         .inner_size(660.0, 620.0)
         .resizable(false)
         .maximizable(false)

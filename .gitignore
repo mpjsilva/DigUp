@@ -26,3 +26,8 @@ shell/src-tauri/gen/
 # What scripts/package-*.sh gather for the packages
 shell/src-tauri/helper/
 shell/src-tauri/THIRD-PARTY-NOTICES.txt
+
+# Artefatos gerados por packaging/build.sh (nao versionar)
+/.build-work/
+/rpmbuild/
+/dist/

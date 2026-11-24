@@ -22,6 +22,7 @@ Em Fedora/RHEL/openSUSE com `rpm-build`, `dpkg` (para `dpkg-deb`), `curl` e `tar
 ```bash
 git clone https://github.com/mpjsilva/DigUp.git
 cd DigUp
+git checkout rpm-packaging   # o empacotamento esta' nesta branch
 chmod +x packaging/build.sh
 ./packaging/build.sh
 ```

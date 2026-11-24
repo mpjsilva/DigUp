@@ -1,253 +1,286 @@
+<p align="center"><a href="README.en.md">English</a> · <b>Português (Brasil)</b></p>
+
 <p align="center"><img src="docs/logo.png" width="96" alt=""></p>
 
 <h1 align="center">DigUp</h1>
 
-<p align="center"><b>Describe it. Dig it up.</b><br>
-Search the files on your computer by what's in them, with Google DeepMind's
-<a href="https://huggingface.co/google/embeddinggemma-2">EmbeddingGemma 2</a>.</p>
+<p align="center"><b>Descreva. Encontre.</b><br>
+Busque os arquivos do seu computador pelo que há dentro deles, com o
+<a href="https://huggingface.co/google/embeddinggemma-2">EmbeddingGemma 2</a> do Google DeepMind.</p>
 
-<p align="center"><a href="https://github.com/ARahim3/DigUp/releases/latest"><b>Download for Mac</b></a> ·
+<p align="center"><a href="https://github.com/ARahim3/DigUp/releases/latest"><b>Baixar para Mac</b></a> ·
 <a href="https://github.com/ARahim3/DigUp/releases/tag/v0.7.0-beta.2"><b>Windows (beta)</b></a> ·
-<a href="https://github.com/ARahim3/DigUp/releases/tag/v0.7.0-beta.2"><b>Linux (beta)</b></a><br>
-<sub>Free and open source. Everything runs on your computer.</sub></p>
+<a href="https://github.com/mpjsilva/DigUp/releases/tag/rpm-v0.7.0-beta.3"><b>Linux — RPM (neste fork)</b></a><br>
+<sub>Gratuito e de código aberto. Tudo roda no seu computador.</sub></p>
 
 <p align="center">
-<a href="https://github.com/ARahim3/DigUp/stargazers"><img src="https://img.shields.io/github/stars/ARahim3/DigUp?style=flat-square" alt="GitHub stars"></a>
+<a href="https://github.com/ARahim3/DigUp/stargazers"><img src="https://img.shields.io/github/stars/ARahim3/DigUp?style=flat-square" alt="Estrelas no GitHub"></a>
 <a href="https://github.com/ARahim3/DigUp/releases"><img src="https://img.shields.io/github/downloads/ARahim3/DigUp/total?style=flat-square" alt="Downloads"></a>
-<a href="https://github.com/ARahim3/DigUp/releases/latest"><img src="https://img.shields.io/github/v/release/ARahim3/DigUp?style=flat-square" alt="Latest release"></a>
-<a href="LICENSE"><img src="https://img.shields.io/github/license/ARahim3/DigUp?style=flat-square" alt="MIT license"></a><br>
-<a href="https://trendshift.io/repositories/295333?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-295333" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/trendshift/repositories/295333/daily?language=Swift" alt="ARahim3/DigUp on Trendshift: #1 repository of the day for Swift" width="250" height="55"></a>
+<a href="https://github.com/ARahim3/DigUp/releases/latest"><img src="https://img.shields.io/github/v/release/ARahim3/DigUp?style=flat-square" alt="Último lançamento"></a>
+<a href="LICENSE"><img src="https://img.shields.io/github/license/ARahim3/DigUp?style=flat-square" alt="Licença MIT"></a><br>
+<a href="https://trendshift.io/repositories/295333?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-295333" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/trendshift/repositories/295333/daily?language=Swift" alt="ARahim3/DigUp no Trendshift: repositório do dia para Swift" width="250" height="55"></a>
 </p>
 
-<p align="center"><img src="docs/demo.gif" width="800" alt="DigUp's search panel on a Mac, on Windows and on Linux: a zebra in a video, a podcast minute, a clause in a lease, a dog on the beach in English, Bengali and Arabic, and code that opens in Zed."></p>
+<p align="center"><img src="docs/demo.gif" width="800" alt="O painel de busca do DigUp no Mac, no Windows e no Linux: uma zebra em um vídeo, um minuto de podcast, uma cláusula de um contrato de aluguel, um cachorro na praia em inglês, bengali e árabe, e um código que abre no Zed."></p>
 
-EmbeddingGemma 2 is the multimodal embedding model Google DeepMind released in October 2026. It puts text, images,
-audio and video into one shared space: a photo of a dog on a beach lands next to the words "a dog on the beach", and a
-recording of someone talking about sleep lands next to "where they talk about sleep". It understands more than 100
-languages, it's open (Apache 2.0), and at 740M parameters it's small enough to run on a laptop.
+O EmbeddingGemma 2 é o modelo multimodal de embedding lançado pelo Google DeepMind em outubro de 2026. Ele coloca texto,
+imagens, áudio e vídeo em um mesmo espaço compartilhado: uma foto de um cachorro na praia fica perto das palavras
+"um cachorro na praia", e uma gravação de alguém falando sobre sono fica perto de "onde eles falam sobre dormir". Ele
+entende mais de 100 idiomas, é aberto (Apache 2.0) e, com 740 milhões de parâmetros, é pequeno o bastante para rodar
+em um notebook.
 
-DigUp brings that to the files on your computer, on a Mac, on Windows or on Linux. Pick the folders to search, and it
-reads the pictures, PDFs, documents, recordings and videos in them. Then describe what you're looking for, in your own
-words, and it finds the match, whatever kind of file it is.
+O DigUp leva isso aos arquivos do seu computador, no Mac, no Windows ou no Linux. Escolha as pastas que deseja buscar e
+ele lê as imagens, PDFs, documentos, gravações e vídeos que estão nelas. Depois descreva o que procura com as suas
+próprias palavras, e ele encontra o correspondente, seja qual for o tipo de arquivo.
 
-## What you can find
+## O que você pode encontrar
 
-- "zebra in a video" opens the clip at the moment the zebra shows up
-- "where they talk about sleep" jumps to that minute of a podcast
-- "the clause about pets in the lease" shows the PDF page
-- "a dog on the beach" finds the photo, and "payment declined error" the screenshot
-- a search in English can find a note written in Bengali, Arabic or any of the model's 100+ languages, and the other
-  way around
-- "code: retry a failed call with backoff" finds the function in your projects, if you turn on code search
+- "zebra em um vídeo" abre o clipe no momento em que a zebra aparece
+- "onde eles falam sobre dormir" vai direto ao minuto do podcast
+- "a cláusula sobre animais no contrato de aluguel" mostra a página do PDF
+- "um cachorro na praia" encontra a foto, e "erro de pagamento recusado" a captura de tela
+- uma busca em inglês pode encontrar uma nota escrita em bengali, árabe ou qualquer um dos mais de 100 idiomas do
+  modelo, e o contrário também
+- "code: tentar novamente uma chamada que falhou com backoff" encontra a função nos seus projetos, se você ativar a
+  busca de código
 
-Exact words count too. Invoice numbers, error codes and names are matched as written, in file names and document text,
-so a search gets both the meaning and the exact string. On a Mac that includes the text inside screenshots.
+Palavras exatas também contam. Números de nota fiscal, códigos de erro e nomes são comparados exatamente como foram
+escritos, tanto em nomes de arquivos quanto no texto dos documentos: a busca considera tanto o significado quanto a
+string exata. No Mac, isso inclui o texto dentro de capturas de tela.
 
-## Private
+## Privacidade
 
-Nothing you index leaves your computer. DigUp goes online only to download the model once and to check for updates
-once a day. The update check sends nothing about your files, and you can turn it off. No account, no telemetry.
+Nada do que você indexa sai do seu computador. O DigUp só acessa a internet para baixar o modelo uma vez e verificar
+atualizações uma vez por dia. A verificação de atualizações não envia nada sobre seus arquivos, e você pode
+desativá-la. Sem conta, sem telemetria.
 
-## Install
+## Instalação
 
-**Mac.** Download the DMG from [Releases](https://github.com/ARahim3/DigUp/releases/latest) and drag DigUp to
-Applications, or use Homebrew: `brew install --cask arahim3/tap/digup`. It needs an Apple Silicon Mac with macOS 14 or
-later.
+**Mac.** Baixe o DMG em [Releases](https://github.com/ARahim3/DigUp/releases/latest) e arraste o DigUp para
+Aplicativos, ou use o Homebrew: `brew install --cask arahim3/tap/digup`. Requer um Mac com Apple Silicon e macOS 14 ou
+posterior.
 
-**Windows.** Download `DigUp_x.y.z_x64-setup.exe` from the
-[beta release](https://github.com/ARahim3/DigUp/releases/tag/v0.7.0-beta.2) and run it. It installs for you only, with
-no admin rights. Windows may say it doesn't recognize the app, because the installer isn't signed yet: choose More
-info, then Run anyway. It needs 64-bit Windows 10 or 11.
+**Windows.** Baixe `DigUp_x.y.z_x64-setup.exe` do
+[lançamento beta](https://github.com/ARahim3/DigUp/releases/tag/v0.7.0-beta.2) e execute-o. A instalação é apenas para
+o seu usuário, sem precisar de direitos de administrador. O Windows pode dizer que não reconhece o aplicativo, porque
+o instalador ainda não é assinado: escolha Mais informações e depois Executar assim mesmo. Requer Windows 10 ou 11 de
+64 bits.
 
-**Linux.** On Ubuntu, Debian, Mint and the like, download the .deb and install it:
+**Linux (Debian, Ubuntu, Mint e similares).** Baixe o `.deb` e instale:
 
 ```sh
 sudo apt install ./DigUp_x.y.z_amd64.deb
 ```
 
-The package is called `dig-up`, because Debian already has an unrelated `digup`. Anywhere else, download the
-AppImage, make it executable and run it. Both are for 64-bit Intel and AMD processors and work on Ubuntu 22.04,
-Debian 12, Mint 21 and newer.
+O pacote se chama `dig-up`, porque o Debian já tem outro pacote sem relação chamado `digup`. Em qualquer outra
+distribuição, baixe o AppImage, torne-o executável e execute-o. Ambos são para processadores Intel e AMD de 64 bits e
+funcionam no Ubuntu 22.04, Debian 12, Mint 21 e posteriores.
 
-Then, on any of them:
+**Linux (RPM — Fedora, RHEL, openSUSE).** Este fork publica um RPM pronto:
+[baixe o pacote](https://github.com/mpjsilva/DigUp/releases/tag/rpm-v0.7.0-beta.3) e instale com:
 
-1. Open DigUp. While the model downloads (865 MB, once), pick the folders to search: whole folders, or only some of
-   their subfolders. DigUp shows how long the first pass will take for each, measured on your computer.
-2. Press the shortcut in any app and describe what you're looking for: **⇧⌘Space** on a Mac, **Ctrl+Shift+Space** on
-   Windows and Linux.
+```sh
+sudo dnf install ./dig-up-0.7.0.beta.3-1.fc45.x86_64.rpm
+```
 
-DigUp keeps itself up to date: the Mac app, the Windows installer and the AppImage install updates with one click.
-With the .deb, DigUp tells you when there's a new version and opens its release page.
+O RPM contém exatamente os mesmos binários do `.deb` oficial. O código do empacotamento está em
+[`packaging/`](packaging/) e as instruções de build, em
+[`packaging/README.md`](packaging/README.md).
 
-## Using it
+Depois, em qualquer sistema:
 
-| Mac | Windows and Linux | What it does |
+1. Abra o DigUp. Enquanto o modelo é baixado (865 MB, uma única vez), escolha as pastas que deseja buscar: pastas
+   inteiras ou apenas algumas subpastas. O DigUp mostra quanto tempo levará a primeira varredura em cada uma, medido no
+   seu computador.
+2. Pressione o atalho em qualquer aplicativo e descreva o que procura: **⇧⌘Espaço** no Mac, **Ctrl+Shift+Espaço** no
+   Windows e no Linux.
+
+O DigUp se mantém atualizado: no Mac, no instalador do Windows e no AppImage, as atualizações são aplicadas com um
+clique. Com o `.deb`, o DigUp avisa quando há uma versão nova e abre a página do lançamento. Com o RPM deste fork,
+baixe o novo pacote na página de lançamentos do fork.
+
+## Como usar
+
+| Mac | Windows e Linux | O que faz |
 |---|---|---|
-| ⇧⌘Space | Ctrl+Shift+Space | Opens the search panel from any app (you can change it) |
-| ↓ ↑ | ↓ ↑ | Moves through the results |
-| ↩ | Enter | Opens the result: PDFs at the page, recordings and videos at the moment, code in your editor at the line |
-| Space | Space | A big preview, at the page or moment (once you've moved to a result) |
-| ⌘↩ | Ctrl+Enter | Shows it in Finder, Explorer or your file manager |
-| ⌘C | Ctrl+C (in the window) | Copies the file, to paste anywhere |
-| ⌘O | Ctrl+O | The same search in a bigger window, with a picture grid and filters |
+| ⇧⌘Espaço | Ctrl+Shift+Espaço | Abre o painel de busca de qualquer aplicativo (o atalho pode ser alterado) |
+| ↓ ↑ | ↓ ↑ | Navega pelos resultados |
+| ↩ | Enter | Abre o resultado: PDFs na página, gravações e vídeos no momento, código no editor, na linha |
+| Espaço | Espaço | Uma prévia grande, na página ou no momento (depois de selecionar um resultado) |
+| ⌘↩ | Ctrl+Enter | Mostra o arquivo no Finder, no Explorer ou no seu gerenciador de arquivos |
+| ⌘C | Ctrl+C (na janela) | Copia o arquivo, para colar em qualquer lugar |
+| ⌘O | Ctrl+O | A mesma busca em uma janela maior, com grade de imagens e filtros |
 
-DigUp lives in the menu bar on a Mac and in the tray on Windows and Linux, where you can see how indexing is going,
-pause it, or open Settings. Opening it from the Start menu or your app list shows the search window.
+No Mac, o DigUp fica na barra de menus; no Windows e no Linux, na área de notificação (bandeja), onde você pode
+acompanhar a indexação, pausá-la ou abrir as Configurações. Abri-lo pelo menu Iniciar ou pela lista de aplicativos
+mostra a janela de busca.
 
-A few things differ by system:
+Algumas coisas mudam conforme o sistema:
 
-- On a Mac, a video opens at its moment in QuickTime Player (macOS asks once whether DigUp may control it) or IINA,
-  and a PDF opens in Preview with your words in its search. On Windows and Linux, PDFs open at the page in your PDF
-  viewer if it's one that can be told a page (Edge, Chrome, Firefox, Acrobat, SumatraPDF, Evince, Okular), and
-  recordings and videos at the moment in VLC, mpv or MPC-HC. Other apps open the file from the start; the big
-  preview plays it from the moment either way.
-- On GNOME and KDE under Wayland, which don't let apps set their own shortcuts, DigUp adds Ctrl+Shift+Space to the
-  desktop's keyboard settings during setup, and you change it there. On other Wayland desktops, Settings shows the
-  command to give a shortcut of your own.
-- On GNOME, the tray icon needs the AppIndicator extension, which Ubuntu includes. Without it, the window's ⋯ menu has
-  the same items.
+- No Mac, um vídeo abre no momento em que o trecho aparece no QuickTime Player (o macOS pergunta uma vez se o DigUp
+  pode controlá-lo) ou no IINA, e um PDF abre no Visualizador com as suas palavras já no campo de busca. No Windows e
+  no Linux, os PDFs abrem na página no seu leitor de PDF, se ele aceitar receber um número de página (Edge, Chrome,
+  Firefox, Acrobat, SumatraPDF, Evince, Okular), e gravações e vídeos abrem no momento no VLC, mpv ou MPC-HC. Outros
+  aplicativos abrem o arquivo do início; a prévia grande sempre reproduz a partir do momento.
+- No GNOME e no KDE sob Wayland, que não deixam que os aplicativos definam seus próprios atalhos, o DigUp adiciona
+  Ctrl+Shift+Espaço às configurações de teclado do ambiente durante a configuração inicial, e você altera lá. Em outros
+  ambientes Wayland, as Configurações mostram o comando para criar um atalho próprio.
+- No GNOME, o ícone da bandeja precisa da extensão AppIndicator, que o Ubuntu já inclui. Sem ela, o menu ⋯ da janela
+  tem os mesmos itens.
 
-## What it reads
+## O que ele lê
 
-Only the folders you choose:
+Apenas as pastas que você escolher:
 
-- pictures and screenshots (JPEG, PNG, HEIC, WebP and more), by what they show, and on a Mac screenshots by their text
-  too
-- PDFs, page by page, scans included. A long one gets its first 30 pages right away and the rest once everything
-  else is in (up to 5,000 pages a file)
-- documents: txt, md, typ, rtf, docx, odt, html, and on a Mac doc, long ones the same way. Text that's mostly numbers,
-  like a data export, is matched by its exact text only
-- spreadsheets and presentations: xlsx, ods, pptx and odp, read for their text: each sheet's name and rows, each
-  slide's text and speaker notes
-- audio of any length: the model listens to 30 seconds at a time, so DigUp takes overlapping 30-second windows and a
-  match points to its moment
-- video of any length: a frame every few seconds, one per shot, plus the soundtrack the same way as audio
+- imagens e capturas de tela (JPEG, PNG, HEIC, WebP e mais), pelo que mostram; no Mac, capturas de tela também pelo
+  texto
+- PDFs, página por página, inclusive digitalizações. Um PDF longo tem as primeiras 30 páginas indexadas de imediato e
+  o restante depois que tudo o mais já estiver pronto (até 5.000 páginas por arquivo)
+- documentos: txt, md, typ, rtf, docx, odt, html e, no Mac, doc; documentos longos da mesma forma. Textos formados
+  basicamente por números, como uma exportação de dados, são encontrados apenas pelo texto exato
+- planilhas e apresentações: xlsx, ods, pptx e odp, lidas pelo texto: nome e linhas de cada planilha, texto de cada
+  slide e notas do palestrante
+- áudio de qualquer duração: o modelo escuta 30 segundos por vez, então o DigUp usa janelas sobrepostas de 30 segundos
+  e um resultado aponta para o momento correspondente
+- vídeo de qualquer duração: um quadro a cada poucos segundos, um por plano, mais a trilha sonora da mesma forma que
+  o áudio
 
-Outside the folders you pick for code search, it never reads code, and inside a code project (a folder with `.git`,
-`package.json` and the like) it reads only screenshots. It never reads keys, certificates, password files, hidden
-folders like `.ssh`, apps or caches. It skips folders that look like datasets, and never downloads files that only
-live in the cloud (iCloud on a Mac, OneDrive on Windows). You can skip more folders or file types in Settings. DigUp
-only reads your files; it never changes, moves or uploads them.
+Fora das pastas que você selecionou para a busca de código, o DigUp nunca lê código; dentro de um projeto de código
+(uma pasta com `.git`, `package.json` e afins), ele lê apenas capturas de tela. Ele nunca lê chaves, certificados,
+arquivos de senha, pastas ocultas como `.ssh`, aplicativos ou caches. Ignora pastas que parecem conjuntos de dados
+(datasets) e nunca baixa arquivos que existem apenas na nuvem (iCloud no Mac, OneDrive no Windows). Você pode ignorar
+mais pastas ou tipos de arquivo nas Configurações. O DigUp apenas lê seus arquivos: nunca os altera, move ou envia.
 
-The first pass happens once. On a Mac it takes a few minutes for a few hundred files and can take an hour for a big
-Downloads folder. On Windows and Linux, DigUp runs the model on the graphics card where that's faster and on the
-processor otherwise; on a processor alone a picture takes a few seconds (about five on a 2017 laptop's Core i5), so a
-large photo library can take hours, which is why setup shows the time first. After that, a new file is searchable a
-few seconds after it lands.
+A primeira varredura acontece uma única vez. No Mac, leva alguns minutos para algumas centenas de arquivos e pode levar
+uma hora para uma pasta Downloads grande. No Windows e no Linux, o DigUp roda o modelo na placa de vídeo quando isso é
+mais rápido e no processador de outro modo; apenas no processador, uma imagem leva alguns segundos (cerca de cinco em
+um Core i5 de notebook de 2017), então uma biblioteca de fotos grande pode levar horas — por isso a configuração
+mostra o tempo antes de começar. Depois disso, um arquivo novo fica pesquisável alguns segundos depois de chegar.
 
-## Code
+## Código
 
-EmbeddingGemma 2 reads code too, so DigUp can search your projects. Code search is off until you turn it on, in
-Settings → Code or during setup, for the folders you pick. Each repo shows how long reading it takes and how much room
-its index needs. Then start a search with `code:` and say what the code does, or type a name that's in it:
+O EmbeddingGemma 2 também lê código, então o DigUp pode buscar nos seus projetos. A busca de código vem desativada até
+você ativá-la, em Configurações → Código ou durante a configuração inicial, para as pastas que escolher. Cada
+repositório mostra quanto tempo leva para ser lido e quanto espaço seu índice ocupa. Depois comece uma busca com
+`code:` e descreva o que o código faz, ou digite um nome que esteja nele:
 
-- "code: retry a failed call with backoff" finds the function, whatever it's called
-- "code: refreshAccessToken" goes to the line that defines it, not the places that call it
-- "code: plot how many examples each class has" finds the notebook cell
+- "code: tentar novamente uma chamada que falhou com backoff" encontra a função, seja qual for o nome dela
+- "code: refreshAccessToken" vai até a linha que a define, não aos lugares que a chamam
+- "code: plotar quantos exemplos cada classe tem" encontra a célula do notebook
 
-Results open in your editor at the line: Zed, VS Code, Cursor, Sublime Text, JetBrains IDEs and a few more, Xcode on
-a Mac and Notepad++ on Windows (pick one in Settings). Code has an index of its own and never shows up in other
-searches. DigUp reads source files, notebooks (without their outputs) and a repo's own docs. It skips what git
-ignores, vendored and generated code, data files, and anything that looks like a key or a password. While you're
-working on code, the index catches up a minute after things go quiet.
+Os resultados abrem no seu editor, na linha: Zed, VS Code, Cursor, Sublime Text, IDEs da JetBrains e alguns mais, Xcode
+no Mac e Notepad++ no Windows (escolha um nas Configurações). O código tem um índice próprio e nunca aparece em outras
+buscas. O DigUp lê arquivos-fonte, notebooks (sem as saídas) e a documentação do próprio repositório. Ele ignora o que
+o git ignora, código vendorizado e gerado, arquivos de dados e qualquer coisa que pareça chave ou senha. Enquanto você
+trabalha no código, o índice se atualiza um minuto depois que as coisas ficam paradas.
 
-On a Mac, reading code takes about 20 seconds for a small app, and about 20 minutes and 130 MB of index for all of
-llama.cpp.
+No Mac, ler o código de um aplicativo pequeno leva cerca de 20 segundos; todo o llama.cpp leva cerca de 20 minutos e
+130 MB de índice.
 
-## How it works
+## Como funciona
 
 ```
-your folders ─► readers that turn files into pictures, text and sound
-             ─► EmbeddingGemma 2 on llama.cpp, in a helper process that quits when it's done
-             ─► one SQLite file: a vector for every picture, page, passage, video frame and 30 s of sound,
-                plus a keyword index (code search keeps a second one, for code)
-your words   ─► the same model's text part (~250 MB, only while you search) ─► nearest vectors + exact words
+suas pastas ─► leitores que transformam arquivos em imagens, texto e som
+            ─► EmbeddingGemma 2 sobre llama.cpp, em um processo auxiliar que sai quando termina
+            ─► um arquivo SQLite: um vetor para cada imagem, página, trecho, quadro de vídeo e 30 s de áudio,
+               mais um índice de palavras-chave (a busca de código mantém um segundo, só para código)
+suas palavras ─► a parte de texto do mesmo modelo (~250 MB, apenas durante a busca) ─► vetores mais próximos + palavras exatas
 ```
 
-DigUp runs ggml-org's 8-bit build of EmbeddingGemma 2 through [llama.cpp](https://github.com/ggml-org/llama.cpp): on
-the Mac's GPU with Metal, and on Windows and Linux on the GPU with Vulkan when a quick check at setup finds it faster
-than the processor and getting the same results. Every vector lives in the same 768-dimensional space, which is why
-one query can rank a video frame against a PDF page. A search embeds your words in milliseconds and compares them with
-everything in the index. Exact-word matches get a boost, because no embedding holds an invoice number exactly.
+O DigUp executa o build de 8 bits do EmbeddingGemma 2 do ggml-org por meio do
+[llama.cpp](https://github.com/ggml-org/llama.cpp): na GPU do Mac com Metal, e no Windows e no Linux na GPU com Vulkan
+quando uma verificação rápida na configuração inicial constata que é mais rápido que o processador e produz os mesmos
+resultados. Todos os vetores vivem no mesmo espaço de 768 dimensões, e é por isso que uma única busca pode comparar um
+quadro de vídeo com uma página de PDF. Uma busca transforma suas palavras em embedding em milissegundos e as compara
+com tudo o que está no índice. Correspondências de palavras exatas recebem um reforço, porque nenhum embedding guarda
+um número de nota fiscal exatamente como ele é.
 
-The search engine is the same Swift code on every system. On a Mac it reads files with macOS's own frameworks (ImageIO,
-PDFKit, AVFoundation, and Vision for the text in screenshots) and the app is SwiftUI. On Windows and Linux it reads
-them with PDFium, ffmpeg, stb and miniz, and the app around it is built with [Tauri](https://tauri.app).
+O mecanismo de busca é o mesmo código Swift em todos os sistemas. No Mac, ele lê arquivos com os frameworks próprios
+do macOS (ImageIO, PDFKit, AVFoundation e Vision para o texto em capturas de tela) e o aplicativo é feito em SwiftUI.
+No Windows e no Linux, a leitura usa PDFium, ffmpeg, stb e miniz, e o aplicativo ao redor é feito com
+[Tauri](https://tauri.app).
 
-The index remembers which model version made its vectors. An update that leaves the vectors unchanged keeps your
-index, and a test checks every llama.cpp update against stored reference vectors before it ships.
+O índice guarda qual versão do modelo produziu seus vetores. Uma atualização que não altera os vetores mantém o índice,
+e um teste verifica cada atualização do llama.cpp contra vetores de referência armazenados antes de lançá-la.
 
-## Build from source
+## Como compilar do código-fonte
 
-On a Mac you'll need Xcode 26, git, and CMake (or `uv`) for llama.cpp. If `xcode-select -p` shows the Command Line
-Tools, switch to Xcode first (`sudo xcode-select -s /Applications/Xcode.app`): they lack the SwiftUI and Swift Testing
-macros the build needs.
+No Mac, você precisa do Xcode 26, git e CMake (ou `uv`) para o llama.cpp. Se `xcode-select -p` apontar para as Command
+Line Tools, mude para o Xcode primeiro (`sudo xcode-select -s /Applications/Xcode.app`): elas não trazem as macros de
+SwiftUI e Swift Testing que o build precisa.
 
 ```sh
 git clone https://github.com/ARahim3/DigUp && cd DigUp
-scripts/build-llama.sh            # llama.cpp at a pinned tag, with a one-line patch (a few minutes)
+scripts/build-llama.sh            # llama.cpp em uma tag fixada, com um patch de uma linha (alguns minutos)
 swift build -c release && swift test
 ./build.sh                        # → build.noindex/DigUp.app
 ```
 
-On Windows and Linux you'll need Swift 6.4, Rust and Node; on Windows also Visual Studio's C++ build tools, with the
-commands run in Git for Windows' bash. `scripts/fetch-vendor.sh` and `scripts/build-llama.sh` get the libraries, then
-`scripts/package-linux.sh` makes the .deb and the AppImage, and `scripts/package-windows.sh` the installer.
-[The packages workflow](.github/workflows/packages.yml) has every step, down to the packages each system needs.
+No Windows e no Linux, você precisa de Swift 6.4, Rust e Node; no Windows, também das ferramentas de compilação C++ do
+Visual Studio, com os comandos executados no bash do Git for Windows. `scripts/fetch-vendor.sh` e
+`scripts/build-llama.sh` obtêm as bibliotecas; `scripts/package-linux.sh` gera o `.deb` e o AppImage, e
+`scripts/package-windows.sh`, o instalador.
+[O workflow de pacotes](.github/workflows/packages.yml) traz todas as etapas, inclusive os pacotes de que cada sistema
+precisa.
 
-There's also a command-line tool, `.build/release/digup`, that indexes, searches and runs the evals from the terminal
-(`digup --help`). `scripts/make-testbed.sh` builds a folder of test files to try it on on a Mac (it needs ffmpeg), and
-`evals/` holds the queries ranking changes are measured with.
+Para gerar o RPM deste fork, veja [`packaging/README.md`](packaging/README.md).
 
-## FAQ
+Também há uma ferramenta de linha de comando, `.build/release/digup`, que indexa, busca e roda os evals pelo terminal
+(`digup --help`). `scripts/make-testbed.sh` cria uma pasta com arquivos de teste para experimentar no Mac (precisa de
+ffmpeg), e `evals/` guarda as consultas usadas para medir mudanças na relevância.
 
-**How is this different from Spotlight or Windows Search?** They find files by their names, text and metadata. DigUp
-also finds them by what they show or say, and takes you to the page or moment. They work fine side by side.
+## Perguntas frequentes
 
-**What's different on Windows and Linux?** The search is the same: the same model, the same results. Two things are
-missing for now. The text inside screenshots isn't read yet, so a screenshot is found by what it shows rather than by
-an exact code typed into the search. And doc files from old Word versions, RAW photos and SVG pictures are only read
-on a Mac.
+**Como isso difere do Spotlight ou da Busca do Windows?** Eles encontram arquivos pelo nome, texto e metadados. O DigUp
+também os encontra pelo que mostram ou dizem, e leva você à página ou ao momento. Funcionam bem lado a lado.
 
-**Why is the download 865 MB?** That's the model: the text part (310 MB) and the image and audio encoders (555 MB).
-The app itself is about 20 MB on a Mac, and on Windows and Linux 40 to 140 MB depending on the package, since those
-carry their own PDF, video and image readers.
+**O que muda no Windows e no Linux?** A busca é a mesma: mesmo modelo, mesmos resultados. Duas coisas ainda faltam. O
+texto dentro de capturas de tela ainda não é lido, então uma captura é encontrada pelo que mostra, e não por um código
+exato digitado na busca. Além disso, arquivos doc de versões antigas do Word, fotos RAW e imagens SVG só são lidos no
+Mac.
 
-**Will it slow my computer down?** Only the first pass is heavy. After that it reads new files only. The model runs in
-a separate process that quits when it's done, and the search side only loads while you're searching.
+**Por que o download tem 865 MB?** É o modelo: a parte de texto (310 MB) e os codificadores de imagem e áudio (555 MB).
+O aplicativo em si tem cerca de 20 MB no Mac e entre 40 e 140 MB no Windows e no Linux, conforme o pacote, já que
+carrega seus próprios leitores de PDF, vídeo e imagem.
 
-**Which languages?** The model knows more than 100, and DigUp searches in all of them, across languages too. The evals
-cover only English, Bengali and Arabic because those are the languages of the files DigUp was tested on, and Google
-notes that the model isn't equally strong in every language. Two limits apply to exact words, not to meaning: the
-text inside screenshots is read only on a Mac, by Apple's text recognition, which knows about 25 languages, and
-languages written without spaces, like Chinese, Japanese and Thai, aren't split into words.
+**Vai deixar meu computador lento?** Só a primeira varredura é pesada. Depois disso, ele lê apenas arquivos novos. O
+modelo roda em um processo separado que sai quando termina, e a parte da busca só é carregada enquanto você pesquisa.
 
-**How do I remove it?**
-On a Mac, quit it, then delete DigUp.app and `~/Library/Application Support/DigUp`, which holds the model and the
-indexes. Its settings are in `~/Library/Preferences/com.abdurrahim.DigUp.plist`. With Homebrew, `brew uninstall --cask
---zap digup` removes all of it.
-On Windows, uninstall it in Settings → Apps; tick "Delete the application data" to remove the model and the index too.
-On Linux, `sudo apt remove dig-up` (or delete the AppImage), then delete `~/.local/share/digup` (the model and the
-index), `~/.config/com.abdurrahim.DigUp`, `~/.local/share/com.abdurrahim.DigUp` and, if it opened at login,
-`~/.config/autostart/DigUp.desktop`. On GNOME, also remove its shortcut in Settings → Keyboard.
+**Quais idiomas?** O modelo conhece mais de 100, e o DigUp busca em todos eles, inclusive entre idiomas diferentes. Os
+evals cobrem apenas inglês, bengali e árabe, por serem os idiomas dos arquivos usados nos testes, e o Google observa que
+o modelo não é igualmente forte em todos os idiomas. Dois limites valem para palavras exatas, não para o significado: o
+texto dentro de capturas de tela só é lido no Mac, pelo reconhecimento de texto da Apple, que conhece cerca de 25
+idiomas, e idiomas escritos sem espaços, como chinês, japonês e tailandês, não são separados em palavras.
 
-## Support
+**Como desinstalar?**
+No Mac, feche o aplicativo e apague `DigUp.app` e `~/Library/Application Support/DigUp`, que guardam o modelo e os
+índices. As configurações ficam em `~/Library/Preferences/com.abdurrahim.DigUp.plist`. Com o Homebrew,
+`brew uninstall --cask --zap digup` remove tudo.
+No Windows, desinstale em Configurações → Aplicativos; marque "Excluir os dados do aplicativo" para remover também o
+modelo e o índice.
+No Linux, `sudo apt remove dig-up` (ou apague o AppImage) e depois remova `~/.local/share/digup` (modelo e índice),
+`~/.config/com.abdurrahim.DigUp`, `~/.local/share/com.abdurrahim.DigUp` e, se ele abria no login,
+`~/.config/autostart/DigUp.desktop`. Para RPM, use `sudo dnf remove dig-up`. No GNOME, remova também o atalho em
+Configurações → Teclado.
 
-DigUp is free and open source, and it stays that way. If it helps you and you'd like to support it, you can
-[buy me a coffee](https://arahim3.gumroad.com/l/support).
+## Apoio
 
-## Thanks
+O DigUp é gratuito e de código aberto, e pretende continuar assim. Se ele ajudou você e quiser apoiar o projeto, você
+pode [me comprar um café](https://arahim3.gumroad.com/l/support).
 
-DigUp is built on [EmbeddingGemma 2](https://huggingface.co/google/embeddinggemma-2) by Google DeepMind (Apache 2.0)
-and [llama.cpp](https://github.com/ggml-org/llama.cpp) (MIT). The Mac app uses [Sparkle](https://sparkle-project.org)
-(MIT) for updates. The Windows and Linux app is built with [Tauri](https://tauri.app) (MIT or Apache 2.0) and reads
-files with [PDFium](https://pdfium.googlesource.com/pdfium/) (BSD), [FFmpeg](https://ffmpeg.org) (LGPL),
-[stb](https://github.com/nothings/stb) (public domain) and [miniz](https://github.com/richgel999/miniz) (MIT). Their
-license notices ship with the app.
+## Agradecimentos
 
-DigUp isn't affiliated with Google, Apple or Microsoft. Gemma is a trademark of Google LLC; Mac and Spotlight are
-trademarks of Apple Inc.; Windows is a trademark of Microsoft Corporation.
+O DigUp é construído sobre o [EmbeddingGemma 2](https://huggingface.co/google/embeddinggemma-2) do Google DeepMind
+(Apache 2.0) e o [llama.cpp](https://github.com/ggml-org/llama.cpp) (MIT). O aplicativo para Mac usa o
+[Sparkle](https://sparkle-project.org) (MIT) para atualizações. O aplicativo para Windows e Linux é feito com
+[Tauri](https://tauri.app) (MIT ou Apache 2.0) e lê arquivos com
+[PDFium](https://pdfium.googlesource.com/pdfium/) (BSD), [FFmpeg](https://ffmpeg.org) (LGPL),
+[stb](https://github.com/nothings/stb) (domínio público) e [miniz](https://github.com/richgel999/miniz) (MIT). Os
+avisos de licença acompanham o aplicativo.
 
-## License
+O DigUp não é afiliado a Google, Apple ou Microsoft. Gemma é marca da Google LLC; Mac e Spotlight são marcas da Apple
+Inc.; Windows é marca da Microsoft Corporation.
+
+## Licença
 
 MIT

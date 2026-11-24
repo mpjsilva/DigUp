@@ -1,63 +1,65 @@
-# Contributing to DigUp
+<p align="center"><a href="CONTRIBUTING.en.md">English</a> · <b>Português (Brasil)</b></p>
 
-Thanks for your interest in DigUp. It's a small project with one maintainer and a plan for where it's going, so a few
-notes up front save everyone time.
+# Como contribuir para o DigUp
 
-## Open an issue first
+Obrigado pelo interesse no DigUp. É um projeto pequeno, com uma única pessoa mantenedora e um plano definido para seu
+caminho, então algumas observações no início economizam tempo de todos.
 
-Please open an issue before you write any code, for a fix as much as for a feature. The same fix or feature may already
-be in progress and not pushed yet. An issue gets you a clear "yes", "not now" or "here's how it should fit" before you
-spend an evening on it. A pull request that arrives without one may be closed with a link back here.
+## Abra uma issue primeiro
+
+Abra uma issue antes de escrever qualquer código, tanto para uma correção quanto para uma funcionalidade. A mesma
+correção ou funcionalidade pode já estar em andamento e ainda não ter sido enviada. Uma issue lhe dá um "sim", "agora
+não" ou "veja como isso se encaixa" antes de você gastar uma noite nisso. Um pull request que chegue sem issue pode ser
+fechado com um link de volta para cá.
 
 ## Pull requests
 
-Once an issue says go:
+Depois que a issue der o sinal verde:
 
-- Keep it to one fix or one feature, with the reason in the description.
-- Make sure `swift test` passes, and `cargo test` in `shell/src-tauri` if you change the Windows and Linux app.
-- If it changes what search returns, run the evals in `evals/` before and after (see "Build from source" in the
-  README) and include both results.
-- For speed or memory changes, measure before and after on the same computer.
+- Mantenha o escopo em uma correção ou uma funcionalidade, com o motivo na descrição.
+- Garanta que `swift test` passe, e `cargo test` em `shell/src-tauri` se você mudou o aplicativo para Windows e Linux.
+- Se a mudança afetar o que a busca retorna, rode os evals em `evals/` antes e depois (veja "Como compilar do
+  código-fonte" no README) e inclua os dois resultados.
+- Para mudanças de velocidade ou memória, meça antes e depois no mesmo computador.
 
-DigUp keeps everything on your computer, so changes that send data elsewhere, like telemetry or cloud services, aren't a
-fit.
+O DigUp mantém tudo no seu computador, então mudanças que enviam dados para fora, como telemetria ou serviços em nuvem,
+não se encaixam.
 
-## Where things are
+## Onde está cada coisa
 
-The search engine in `Sources/DigUpKit` is the same Swift code on every system; what differs by system lives in its
-`Platform/Apple` and `Platform/Portable` folders. The Mac app is `Sources/DigUpApp` (SwiftUI). The Windows and Linux
-app is `shell/` (Tauri: Rust, with plain HTML and JavaScript for its windows), which runs the engine as a helper
-program. `scripts/` builds llama.cpp, ffmpeg and the packages, and `.github/workflows/packages.yml` shows every step of
-the Windows and Linux builds. "Build from source" in the README gets you started.
+O mecanismo de busca em `Sources/DigUpKit` é o mesmo código Swift em todos os sistemas; o que muda por sistema fica
+nas pastas `Platform/Apple` e `Platform/Portable`. O aplicativo para Mac é `Sources/DigUpApp` (SwiftUI). O aplicativo
+para Windows e Linux fica em `shell/` (Tauri: Rust, com HTML e JavaScript simples para as janelas), que executa o
+mecanismo como um programa auxiliar. `scripts/` compila llama.cpp, ffmpeg e os pacotes, e
+`.github/workflows/packages.yml` mostra cada etapa dos builds para Windows e Linux. O título "Como compilar do
+código-fonte" no README é o ponto de partida.
 
-## Updating portable engine dependencies
+Para gerar o RPM deste fork, veja [`packaging/README.md`](packaging/README.md).
 
-`scripts/fetch-vendor.sh` verifies SQLite, miniz, PDFium (each supported platform), and stb downloads against the
-reviewed SHA-256 pins in `scripts/vendor-checksums.json` before extraction or installation. When changing a version,
-review its upstream release and update the corresponding hashes in the same commit. Never obtain an expected hash
-from the same untrusted download at build time. Changing the pins invalidates the vendor cache, including caches
-created before verification was added.
+## Atualizando as dependências vendorizadas do mecanismo portátil
 
-## What to expect
+`scripts/fetch-vendor.sh` verifica os downloads de SQLite, miniz, PDFium (em cada plataforma compatível) e stb contra
+os hashes SHA-256 revisados e fixados em `scripts/vendor-checksums.json` antes de extrair ou instalar. Ao mudar uma
+versão, revise o lançamento upstream e atualize os hashes correspondentes no mesmo commit. Nunca obtenha o hash
+esperado do mesmo download não confiável durante o build. Mudar os hashes invalida o cache de dependências
+vendorizadas, inclusive os caches criados antes da verificação existir.
 
-DigUp is maintained alongside a day job and other projects, and most of the time it gets goes into the plan for where
-it's headed, so replies can take a few days, sometimes longer. A quiet week means busy, not ignored, and every issue
-gets an answer, even if it's "not now".
+## O que esperar
 
-Not every pull request will be merged, even good ones. The project has a direction, and some changes won't fit it.
-Others get reworked or rewritten to fit work in progress, and when that happens you'll be credited in the release
-notes.
+O DigUp é mantido em paralelo com um emprego e outros projetos, e a maior parte do tempo vai para o plano do seu futuro,
+então as respostas podem levar alguns dias, às vezes mais. Uma semana sem novidades significa que a pessoa está
+ocupada, não que você foi ignorado, e toda issue recebe uma resposta, mesmo que seja "agora não".
 
-## Reporting a bug
+Nem todo pull request será aceito, mesmo os bons. O projeto tem uma direção, e algumas mudanças não se encaixam. Outras
+são reworkadas ou reescritas para se adaptarem a trabalho em andamento; quando isso acontece, você é creditado nas
+notas do lançamento.
 
-Helpful reports include your computer (on a Mac its chip and memory; on Windows and Linux its processor and graphics
-card), the system and DigUp versions (on Linux also the desktop, like GNOME or KDE, and Wayland or X11), what you did
-or searched for, and what you expected instead. Logs are in:
+## Como relatar um bug
 
-- Mac: `~/Library/Application Support/DigUp/index.noindex` (`app.log` and `indexer.log`)
-- Windows: `%LOCALAPPDATA%\com.abdurrahim.DigUp\logs`, and `worker.log` in `%LOCALAPPDATA%\DigUp\index`
-- Linux: `~/.local/share/com.abdurrahim.DigUp/logs`, and `worker.log` in `~/.local/share/digup/index`
+Um bom relato inclui seu computador (no Mac, o chip e a memória; no Windows e no Linux, o processador e a placa de
+vídeo), as versões do sistema e do DigUp (no Linux, também o ambiente desktop, como GNOME ou KDE, e Wayland ou X11),
+o que você fez ou buscou e o que esperava acontecer. Os logs ficam em:
 
-They can contain file names and your searches, so look through them before you paste.
-
-For a security problem, please use "Report a vulnerability" on the Security tab instead of a public issue.
+- Mac: `~/Library/Application Support/DigUp/index.noindex` (`app.log` e `indexer.log`)
+- Windows: `%LOCALAPPDATA%\com.abdurrahim.DigUp\logs`, e `worker.log` em `%LOCALAPPDATA%\DigUp\index`
+- Linux: `~/.local/share/com.abdurrahim.DigUp/logs`, e `worker.log` em `~/.local/share/digup/index`

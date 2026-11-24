@@ -1,9 +1,9 @@
-<!-- Thanks. CONTRIBUTING.md asks for an issue first, so the change has a "yes" before the work; link it here. -->
+<!-- Obrigado. O CONTRIBUTING.md pede uma issue primeiro, para que a mudança tenha um "sim" antes do trabalho; vincule-a aqui. -->
 
 Issue: #
 
-What changed and why:
+O que mudou e por quê:
 
-Tests run (`swift test`; `cargo test` in `shell/src-tauri` if the Windows/Linux app changed):
+Testes executados (`swift test`; `cargo test` em `shell/src-tauri` se o aplicativo Windows/Linux mudou):
 
-If search results change: the evals before and after (see "Build from source" in the README):
+Se os resultados da busca mudarem: os evals antes e depois (veja "Como compilar do código-fonte" no README):

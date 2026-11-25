@@ -9,7 +9,7 @@ Busque os arquivos do seu computador pelo que há dentro deles, com o
 <a href="https://huggingface.co/google/embeddinggemma-2">EmbeddingGemma 2</a> do Google DeepMind.</p>
 
 <p align="center"><a href="https://github.com/ARahim3/DigUp/releases/latest"><b>Baixar para Mac</b></a> ·
-<a href="https://github.com/ARahim3/DigUp/releases/tag/v0.7.0-beta.2"><b>Windows (beta)</b></a> ·
+<a href="https://github.com/ARahim3/DigUp/releases/tag/v0.7.0-beta.3"><b>Windows (beta)</b></a> ·
 <a href="https://github.com/mpjsilva/DigUp/releases/tag/rpm-v0.7.0-beta.3"><b>Linux — RPM (neste fork)</b></a><br>
 <sub>Gratuito e de código aberto. Tudo roda no seu computador.</sub></p>
 
@@ -56,12 +56,16 @@ desativá-la. Sem conta, sem telemetria.
 
 ## Instalação
 
+> [!NOTE]
+> O DigUp é publicado apenas aqui, na página de lançamentos deste repositório, e em
+> [digup.arahim.dev](https://digup.arahim.dev). Outros sites que oferecem o DigUp não são do projeto; não baixe deles.
+
 **Mac.** Baixe o DMG em [Releases](https://github.com/ARahim3/DigUp/releases/latest) e arraste o DigUp para
 Aplicativos, ou use o Homebrew: `brew install --cask arahim3/tap/digup`. Requer um Mac com Apple Silicon e macOS 14 ou
 posterior.
 
 **Windows.** Baixe `DigUp_x.y.z_x64-setup.exe` do
-[lançamento beta](https://github.com/ARahim3/DigUp/releases/tag/v0.7.0-beta.2) e execute-o. A instalação é apenas para
+[lançamento beta](https://github.com/ARahim3/DigUp/releases/tag/v0.7.0-beta.3) e execute-o. A instalação é apenas para
 o seu usuário, sem precisar de direitos de administrador. O Windows pode dizer que não reconhece o aplicativo, porque
 o instalador ainda não é assinado: escolha Mais informações e depois Executar assim mesmo. Requer Windows 10 ou 11 de
 64 bits.
